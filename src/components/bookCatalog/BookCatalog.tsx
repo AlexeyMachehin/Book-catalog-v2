@@ -1,24 +1,15 @@
-/* eslint-disable jsx-a11y/img-redundant-alt */
 import { colRef } from '@/firebase/firebase';
 import { sort } from '@/utils/sorting';
 import { onSnapshot } from 'firebase/firestore';
-import { Suspense, memo, useEffect, useState } from 'react';
-import Book from '../Book';
+import { useEffect, useState } from 'react';
 import { IBook } from '@/types/IBook';
 import BookCard from '../BookCard/BookCard';
-import { FixedSizeList as List } from 'react-window';
-import { dividerClasses } from '@mui/material';
 
-function BookCatalog() {
+export default function BookCatalog() {
   const [books, setBooks] = useState<any>([]);
   const [sortingType, setSortingType] = useState<'year' | 'rating' | 'author'>(
     'year',
   );
-
-  const renderBookName = ({ index, style }: any) => {
-    const book = books[index];
-    return <BookCard key={book.id} style={style} book={book} />;
-  };
 
   useEffect(() => {
     const unsubscribe = onSnapshot(colRef, snapshot => {
@@ -31,7 +22,7 @@ function BookCatalog() {
 
   return (
     <div>
-      {/* {sort(books, sortingType).map((sortedBooks: any) => (
+      {sort(books, sortingType).map((sortedBooks: any) => (
         <div
           key={sortedBooks[0][sortingType]}
           style={{
@@ -40,22 +31,10 @@ function BookCatalog() {
           }}>
           {sortedBooks[0][sortingType]}
           {sortedBooks.map((book: IBook) => (
-            // <Book key={book.id} book={book} />
             <BookCard key={book.id} book={book} />
           ))}
         </div>
-      ))} */}
-
-      <List
-        height={500}
-        itemCount={books.length}
-        itemSize={400}
-        layout="horizontal"
-        width={700}>
-        {renderBookName}
-      </List>
+      ))}
     </div>
   );
 }
-
-export default BookCatalog;
