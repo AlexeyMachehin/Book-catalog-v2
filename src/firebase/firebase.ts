@@ -1,14 +1,11 @@
-import { Book, SortingType } from '@/types/Book';
+import { IBook } from '@/types/IBook';
 import { fromDto, toDto } from '@/types/mapper';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, OrderByDirection } from 'firebase/firestore';
 import {
+  getFirestore,
   collection,
-  getDocs,
   getDoc,
-  orderBy,
   doc,
-  query,
   addDoc,
   deleteDoc,
   updateDoc,
@@ -24,39 +21,13 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-console.log(process.env.FIREBASE_API_KEY)
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function getSortDocs(
-  sortingType: SortingType,
-  directionSort: OrderByDirection,
-): Promise<Array<Book>> {
-  const arr: Book[] = [];
-  const documents = await getDocs(
-    query(collection(db, 'books'), orderBy(sortingType, directionSort)),
-  );
+export const colRef = collection(db, 'books');
 
-  documents.docs.forEach(doc => {
-    arr.push(fromDto(doc.data(), doc.id));
-  });
-
-  return arr;
-}
-
-export async function getAllDocs(): Promise<Array<Book>> {
-  const arr: Book[] = [];
-  const documents = await getDocs(collection(db, 'books'));
-
-  documents.docs.forEach(doc => {
-    arr.push(fromDto(doc.data(), doc.id));
-  });
-  return arr;
-}
-
-export async function setDoc(value: Book): Promise<string> {
-  const docRef = await addDoc(collection(db, 'books'), value);
+export async function setDoc(value: IBook): Promise<string> {
+  const docRef = await addDoc(colRef, value);
   return docRef.id;
 }
 
@@ -64,13 +35,13 @@ export async function deleteBook(id: string): Promise<void> {
   await deleteDoc(doc(db, 'books', id));
 }
 
-export async function getDocById(id: string): Promise<Book> {
+export async function getDocById(id: string): Promise<IBook> {
   const document = await getDoc(doc(db, 'books', id));
   return fromDto(document.data(), id);
 }
 
 export async function updateDocById(
-  updatedBook: Book,
+  updatedBook: IBook,
   id: string,
 ): Promise<void> {
   await updateDoc(doc(db, 'books', id), toDto(updatedBook));

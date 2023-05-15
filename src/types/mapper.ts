@@ -1,5 +1,6 @@
-import { DocumentData } from "firebase/firestore";
-import { Book } from "../interfaces/Book";
+import { DocumentData } from 'firebase/firestore';
+import { Book } from './IBook';
+
 export function fromDto(value: DocumentData, id: string): Book {
   return {
     name: value.name,

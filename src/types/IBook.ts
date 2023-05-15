@@ -1,19 +1,19 @@
 import { OrderByDirection } from "firebase/firestore";
 
-export interface Book {
+export interface IBook {
   author: string;
   name: string;
   year: number;
   rating: number;
   isbn: string;
   imageLink: string;
-  id?: string;
+  id: string;
 }
 
 export interface BookState {
-  books: Book[];
+  books: IBook[];
   sortingType: SortingType;
-  recommendedBook: Book | number;
+  recommendedBook: IBook | number;
   directionSort: OrderByDirection;
   loaderOn: boolean;
   errorAlert: boolean;
