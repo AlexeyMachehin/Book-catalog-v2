@@ -17,26 +17,8 @@ function BookCatalog() {
 
   const renderBookName = ({ index, style }: any) => {
     const book = books[index];
-    return <BookCard key={index} style={style} book={book} />;
+    return <BookCard key={book.id} style={style} book={book} />;
   };
-  function areBookPropsEqual(
-    prevProps: Readonly<{ book: IBook }>,
-    nextProps: Readonly<{ book: IBook }>,
-  ) {
-    const prevBook = prevProps.book;
-    const nextBook = nextProps.book;
-
-    return (
-      prevBook.name === nextBook.name &&
-      prevBook.author === nextBook.author &&
-      prevBook.imageLink === nextBook.imageLink &&
-      prevBook.isbn === nextBook.isbn &&
-      prevBook.rating === nextBook.rating &&
-      prevBook.year === nextBook.year
-    );
-  }
-
-  memo(renderBookName, areBookPropsEqual);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(colRef, snapshot => {
