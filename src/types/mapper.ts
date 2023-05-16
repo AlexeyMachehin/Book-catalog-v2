@@ -1,7 +1,7 @@
 import { DocumentData } from 'firebase/firestore';
-import { Book } from './IBook';
+import { IBook } from './IBook';
 
-export function fromDto(value: DocumentData, id: string): Book {
+export function fromDto(value: DocumentData, id: string): IBook {
   return {
     name: value.name,
     year: value.year,
@@ -13,7 +13,7 @@ export function fromDto(value: DocumentData, id: string): Book {
   };
 }
 
-export function toDto(value: Book): DocumentData {
+export function toDto(value: IBook): DocumentData {
   return {
     name: value.name,
     year: value.year,

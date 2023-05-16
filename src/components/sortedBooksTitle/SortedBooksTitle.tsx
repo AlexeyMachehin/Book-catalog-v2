@@ -4,18 +4,15 @@ import { IBook } from '@/types/IBook';
 import classes from './sortedBooksTitle.module.css';
 
 interface ISortedBooksTitleProps {
-  sortedBooks: IBook[];
+  books: IBook[];
   sortingType: keyof IBook;
 }
 
-function SortedBooksTitle({
-  sortedBooks,
-  sortingType,
-}: ISortedBooksTitleProps) {
+function SortedBooksTitle({ books, sortingType }: ISortedBooksTitleProps) {
   return (
     <Typography className={classes.title} variant="h4" component="h4">
       {`${sortingType.charAt(0).toUpperCase() + sortingType.slice(1)}: ${
-        sortedBooks[0][sortingType] ? sortedBooks[0][sortingType] : 'no info'
+        books[0][sortingType] ? books[0][sortingType] : 'no info'
       }`}
     </Typography>
   );
