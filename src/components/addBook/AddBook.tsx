@@ -20,20 +20,15 @@ function AddBook() {
     validationSchema: Yup.object({
       title: Yup.string()
         .max(100, 'Must be 100 characters or less')
-
         .required('Required'),
-
       author: Yup.string().required('Required'),
-
       year: Yup.number()
         .typeError('Enter a  number greater than 1800')
         .min(1800, 'Must be greater than 1800'),
-
       rating: Yup.number()
         .typeError('Enter a  number 1-10')
         .min(0, 'Must be a positive number')
         .max(10, 'Should less than 10'),
-
       isbn: Yup.string()
         .min(13, 'must be at least 13 characters long')
         .max(17, 'must be max 17 characters long')
@@ -72,7 +67,7 @@ function AddBook() {
         />
 
         {formik.touched.title && formik.errors.title ? (
-          <div className={classes.error}>{formik.errors.title}</div>
+          <div className="error">{formik.errors.title}</div>
         ) : null}
 
         <TextField
@@ -86,7 +81,7 @@ function AddBook() {
         />
 
         {formik.touched.author && formik.errors.author ? (
-          <div className={classes.error}>{formik.errors.author}</div>
+          <div className="error">{formik.errors.author}</div>
         ) : null}
 
         <TextField
@@ -99,7 +94,7 @@ function AddBook() {
         />
 
         {formik.touched.year && formik.errors.year ? (
-          <div className={classes.error}>{formik.errors.year}</div>
+          <div className="error">{formik.errors.year}</div>
         ) : null}
 
         <TextField
@@ -112,7 +107,7 @@ function AddBook() {
         />
 
         {formik.touched.rating && formik.errors.rating ? (
-          <div className={classes.error}>{formik.errors.rating}</div>
+          <div className="error">{formik.errors.rating}</div>
         ) : null}
 
         <TextField
@@ -125,7 +120,7 @@ function AddBook() {
         />
 
         {formik.touched.isbn && formik.errors.isbn ? (
-          <div className={classes.error}>{formik.errors.isbn}</div>
+          <div className="error">{formik.errors.isbn}</div>
         ) : null}
 
         <Button type="submit" variant="outlined">
