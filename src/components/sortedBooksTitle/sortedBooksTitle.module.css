@@ -1,0 +1,5 @@
+.title {
+  padding-left: 20px !important;
+  color: var(--divider-text);
+  background-color: var(--divider);
+}

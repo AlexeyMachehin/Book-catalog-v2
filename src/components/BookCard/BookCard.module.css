@@ -1,4 +1,10 @@
-.cardMediaContainer {
+.card {
+  padding-top: 16px;
+  width: 300px;
+  min-height: 400px;
+}
+
+.imgContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,4 +13,9 @@
 .bookCardTypography {
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.cardImg {
+  height: 190px;
+  width: 128px;
 }

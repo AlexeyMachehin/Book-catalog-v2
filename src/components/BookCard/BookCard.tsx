@@ -1,78 +1,82 @@
+import { memo } from 'react';
+import { useInView } from 'react-intersection-observer';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import classes from './BookCard.module.css';
-import { memo } from 'react';
 import { IBook } from '@/types/IBook';
+import classes from './BookCard.module.css';
 
-function BookCard(props: any) {
+function BookCard({ book }: { book: IBook }) {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+  });
+
   return (
-    <div style={props.style}>
-      <Card sx={{ p: 2, width: 300, minHeight: 400 }}>
-        <div className={classes.cardMediaContainer}>
-          <CardMedia
-            component="img"
-            image={props.book.imageLink}
-            alt="book image"
-            sx={{ height: 190, width: 128 }}
+    <Card component="article" ref={ref} className={classes.card}>
+      <div className={classes.imgContainer}>
+        {inView ? (
+          <img
+            src={book.imageLink}
+            alt={`book:${book.name}`}
+            className={classes.cardImg}
           />
-        </div>
+        ) : (
+          <div className={classes.cardImg}>Loading img...</div>
+        )}
+      </div>
+      <CardContent>
+        <Typography
+          className={classes.bookCardTypography}
+          gutterBottom
+          variant="h5"
+          component="h5">
+          Title: {book.name}
+        </Typography>
+        <Typography
+          className={classes.bookCardTypography}
+          variant="body2"
+          color="text.secondary">
+          Author: {book.author}
+        </Typography>
+        <Typography
+          className={classes.bookCardTypography}
+          variant="body2"
+          color="text.secondary">
+          Publication year: {book.year === 0 ? '' : book.year}
+        </Typography>
+        <Typography
+          className={classes.bookCardTypography}
+          variant="body2"
+          color="text.secondary">
+          Rating: {book.rating}
+        </Typography>
+        <Typography
+          className={classes.bookCardTypography}
+          variant="body2"
+          color="text.secondary">
+          ISBN: {book.isbn}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          onClick={() => {
+            // props.handleOpenModal(props.book);
+          }}
+          size="large">
+          Edit
+        </Button>
 
-        <CardContent>
-          <Typography
-            className={classes.bookCardTypography}
-            gutterBottom
-            variant="h5"
-            component="div">
-            Title: {props.book.name}
-          </Typography>
-          <Typography
-            className={classes.bookCardTypography}
-            variant="body2"
-            color="text.secondary">
-            Author: {props.book.author}
-          </Typography>
-          <Typography
-            className={classes.bookCardTypography}
-            variant="body2"
-            color="text.secondary">
-            Publication year: {props.book.year === 0 ? '' : props.book.year}
-          </Typography>
-          <Typography
-            className={classes.bookCardTypography}
-            variant="body2"
-            color="text.secondary">
-            Rating: {props.book.rating}
-          </Typography>
-          <Typography
-            className={classes.bookCardTypography}
-            variant="body2"
-            color="text.secondary">
-            ISBN: {props.book.isbn}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            onClick={() => {
-              // props.handleOpenModal(props.book);
-            }}
-            size="large">
-            Edit
-          </Button>
-
-          <Button
-            onClick={() => {
-              console.log(1);
-            }}
-            size="large">
-            Delete
-          </Button>
-        </CardActions>
-      </Card>
-    </div>
+        <Button
+          onClick={() => {
+            console.log(1);
+          }}
+          size="large">
+          Delete
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
 

@@ -1,13 +1,15 @@
-import { colRef } from '@/firebase/firebase';
-import { sort } from '@/utils/sorting';
-import { onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { IBook } from '@/types/IBook';
+import { onSnapshot } from 'firebase/firestore';
+import { colRef } from '@/firebase/firebase';
 import BookCard from '../BookCard/BookCard';
+import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
+import { sort } from '@/utils/sorting';
+import { IBook } from '@/types/IBook';
+import classes from './bookCatalog.module.css';
 
 export default function BookCatalog() {
   const [books, setBooks] = useState<any>([]);
-  const [sortingType, setSortingType] = useState<'year' | 'rating' | 'author'>(
+  const [sortingType, setSortingType] = useState<keyof IBook>(
     'year',
   );
 
@@ -21,20 +23,21 @@ export default function BookCatalog() {
   }, []);
 
   return (
-    <div>
-      {sort(books, sortingType).map((sortedBooks: any) => (
-        <div
-          key={sortedBooks[0][sortingType]}
-          style={{
-            margin: '10px 0',
-            display: 'flex',
-          }}>
-          {sortedBooks[0][sortingType]}
-          {sortedBooks.map((book: IBook) => (
-            <BookCard key={book.id} book={book} />
-          ))}
+    <section>
+      {sort(books, sortingType).map((sortedBooks: IBook[]) => (
+        <div key={sortedBooks[0][sortingType]}>
+          <SortedBooksTitle
+            sortedBooks={sortedBooks}
+            sortingType={sortingType}
+          />
+
+          <div className={classes.sortedBooks}>
+            {sortedBooks.map((book: IBook) => (
+              <BookCard key={book.id} book={book} />
+            ))}
+          </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 }

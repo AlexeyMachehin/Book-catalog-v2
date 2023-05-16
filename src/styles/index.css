@@ -1,6 +1,6 @@
 @import url('./nullstyle.css');
 @import url('./variables.css');
 
-/* body {
+body {
   background-color: var(--app-background);
-} */
+}
