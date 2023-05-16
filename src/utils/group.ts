@@ -1,6 +1,6 @@
 import { IBook } from '@/types/IBook';
 
-export function sort(catalog: IBook[], sortingType: string): IBook[][] {
+export function group(catalog: IBook[], sortingType: string): IBook[][] {
   let sortBy = '';
   const listData: Set<string | number> = new Set();
   const sortedArr: IBook[][] = [];
