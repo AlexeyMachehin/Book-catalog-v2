@@ -1,15 +1,15 @@
-import { Book } from "./../interfaces/Book";
+import { IBook } from '@/types/IBook';
 
-export function generationRecommendedBook(allBooks: Book[]): Book {
-  let currentDate = new Date();
+export function generateRecommendedBook(allBooks: IBook[]): IBook {
+  const currentDate = new Date();
 
-  let currentYear = currentDate.getUTCFullYear();
+  const currentYear = currentDate.getUTCFullYear();
 
   let index = 0;
 
-  let sortedByYear: Book[] = [];
+  const sortedByYear: IBook[] = [];
 
-  allBooks.forEach((book) => {
+  allBooks.forEach(book => {
     if (book.year <= currentYear - 2) {
       sortedByYear.push(book);
     }
@@ -17,15 +17,15 @@ export function generationRecommendedBook(allBooks: Book[]): Book {
 
   let maxRating = 0;
 
-  sortedByYear.forEach((book) => {
+  sortedByYear.forEach(book => {
     if (book.rating > maxRating) {
       maxRating = book.rating;
     }
   });
 
-  let sortedByRating: Book[] = [];
+  const sortedByRating: IBook[] = [];
 
-  sortedByYear.filter((book) => {
+  sortedByYear.filter(book => {
     if (book.rating === maxRating) {
       sortedByRating.push(book);
     }

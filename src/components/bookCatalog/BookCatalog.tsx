@@ -5,19 +5,24 @@ import BookCard from '../bookCard/BookCard';
 import SortingSelect from '../sortingSelect/SortingSelect';
 import NavigateMenu from '../navigateMenu/NavigateMenu';
 import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
+import AddBook from '../addBook/AddBook';
+import { Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
+import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
 import classes from './bookCatalog.module.css';
 
 export default function BookCatalog() {
   const [books, setBooks] = useState<any>([]);
   const [sortingType, setSortingType] = useState<keyof IBook>('year');
+  const [recommendedBook, setRecommendedBook] = useState(null);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(colRef, snapshot => {
       const booksData = snapshot.docs.map(doc => doc.data());
 
       setBooks(booksData);
+      setRecommendedBook(generateRecommendedBook(booksData));
     });
 
     return () => unsubscribe();
@@ -25,13 +30,28 @@ export default function BookCatalog() {
 
   return (
     <>
-      <section>dfs</section>
+      <section className={classes.header}>
+        {recommendedBook && (
+          <div className={classes.recommendedBookWrapper}>
+            <Typography
+              className={classes.recommendedBookTitle}
+              variant="h4"
+              component="h4">
+              Recommended book
+            </Typography>
+            <BookCard book={recommendedBook} />
+          </div>
+        )}
+
+        <AddBook />
+      </section>
 
       <div className={classes.selectsWrapper}>
         <SortingSelect
           sortingType={sortingType}
           setSortingType={setSortingType}
         />
+
         <NavigateMenu books={books} sortingType={sortingType} />
       </div>
 
