@@ -7,7 +7,7 @@ import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
 import AddBook from '../addBook/AddBook';
 import Loader from '../loader/Loader';
 import EditBookModal from '../editBookModal/EditBookModal';
-import BookCard from "../bookCard/BookCard";
+import BookCard from '../bookCard/BookCard';
 import { Typography } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
 import { IBook } from '@/types/IBook';
