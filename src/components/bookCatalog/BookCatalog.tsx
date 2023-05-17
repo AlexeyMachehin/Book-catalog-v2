@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { colRef } from '@/firebase/firebase';
 import SortingSelect from '../sortingSelect/SortingSelect';
-import BookCard from '../bookCard/BookCard';
 import NavigateMenu from '../navigateMenu/NavigateMenu';
 import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
 import AddBook from '../addBook/AddBook';
 import Loader from '../loader/Loader';
 import EditBookModal from '../editBookModal/EditBookModal';
+import BookCard from "../bookCard/BookCard";
 import { Typography } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
 import { IBook } from '@/types/IBook';
@@ -68,6 +68,7 @@ export default function BookCatalog() {
               component="h4">
               Recommended book
             </Typography>
+            
             <BookCard
               setIsLoaderOn={setIsLoaderOn}
               handleOpenBookModal={handleOpenBookModal}
