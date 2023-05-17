@@ -1,9 +1,9 @@
 import { IBook } from '@/types/IBook';
 
-export function group(catalog: IBook[], sortingType: string): IBook[][] {
+export function group(books: IBook[], sortingType: keyof IBook): IBook[][] {
   let sortBy = '';
-  const listData: Set<string | number> = new Set();
-  const sortedArr: IBook[][] = [];
+  const groupsSet: Set<string | number> = new Set();
+  const result: IBook[][] = [];
 
   if (sortingType === 'author') {
     sortBy = 'year';
@@ -11,38 +11,40 @@ export function group(catalog: IBook[], sortingType: string): IBook[][] {
     sortBy = 'author';
   }
 
-  catalog.forEach(book => {
-    listData.add(book[sortingType]);
+  books.forEach(book => {
+    groupsSet.add(book[sortingType]);
   });
 
-  const listDataArr = Array.from(listData).sort((a, b) => {
-    if (typeof a === 'string' && typeof b === 'string') {
-      return a.localeCompare(b);
-    }
-    if (a > b) return -1;
-    if (a < b) return 1;
+  const groupsArr = Array.from(groupsSet).sort(
+    (a: string | number, b: string | number) => {
+      if (typeof a === 'string' && typeof b === 'string') {
+        return a.localeCompare(b);
+      } else {
+        return (b as number) - (a as number);
+      }
+    },
+  );
+
+  groupsArr.forEach(booksGroup => {
+    const groupedBooks = books.filter(book => book[sortingType] === booksGroup);
+
+    result.push(groupedBooks);
   });
 
-  for (let i = 0; i < listDataArr.length; i++) {
-    const arrayBooks = catalog.filter(
-      book => book[sortingType] === listDataArr[i],
-    );
-    sortedArr.push(arrayBooks);
-  }
-
-  sortedArr.forEach(v => {
+  result.forEach((v: IBook[]) => {
     if (v.length > 1) {
-      v.sort((a, b) => {
+      v.sort((a: IBook, b: IBook) => {
         if (sortBy === 'author') {
-          if (a[sortBy].toLowerCase() > b[sortBy].toLowerCase()) return 1;
-          if (a[sortBy].toLowerCase() < b[sortBy].toLowerCase()) return -1;
+          return a[sortBy].toLowerCase().localeCompare(b[sortBy].toLowerCase());
         } else {
-          if (a[sortBy] > b[sortBy]) return -1;
-          if (a[sortBy] < b[sortBy]) return 1;
+          return (
+            (a[sortBy as keyof IBook] as number) -
+            (b[sortBy as keyof IBook] as number)
+          );
         }
       });
     }
   });
 
-  return sortedArr;
+  return result;
 }

@@ -6,6 +6,7 @@ import SortingSelect from '../sortingSelect/SortingSelect';
 import NavigateMenu from '../navigateMenu/NavigateMenu';
 import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
 import AddBook from '../addBook/AddBook';
+import Loader from '../loader/Loader';
 import EditBookModal from '../editBookModal/EditBookModal';
 import { Typography } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
@@ -13,12 +14,11 @@ import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
 import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
 import classes from './bookCatalog.module.css';
-import Loader from '../loader/Loader';
 
 export default function BookCatalog() {
-  const [books, setBooks] = useState<any>([]);
+  const [books, setBooks] = useState<IBook[]>([]);
   const [sortingType, setSortingType] = useState<keyof IBook>('year');
-  const [recommendedBook, setRecommendedBook] = useState(null);
+  const [recommendedBook, setRecommendedBook] = useState<IBook | null>(null);
   const [isEditBookModalOpen, setIsEditBookModalOpen] = useState(false);
   const [editBook, setEditBook] = useState<IBook | null>(null);
   const [isLoaderOn, setIsLoaderOn] = useState(false);
@@ -33,10 +33,12 @@ export default function BookCatalog() {
       const booksData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as IBook[];
 
-      setBooks(booksData);
-      setRecommendedBook(generateRecommendedBook(booksData));
+      if (booksData) {
+        setBooks(booksData);
+        setRecommendedBook(generateRecommendedBook(booksData));
+      }
     });
 
     return () => unsubscribe();
@@ -45,6 +47,7 @@ export default function BookCatalog() {
   return (
     <>
       {isLoaderOn && <Loader />}
+
       <Toaster toastOptions={{ duration: 4000 }} />
 
       {editBook && (
@@ -66,6 +69,7 @@ export default function BookCatalog() {
               Recommended book
             </Typography>
             <BookCard
+              setIsLoaderOn={setIsLoaderOn}
               handleOpenBookModal={handleOpenBookModal}
               book={recommendedBook}
             />

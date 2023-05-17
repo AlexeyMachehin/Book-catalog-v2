@@ -1,11 +1,10 @@
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
+import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import { Button, TextField, Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
 import { updateBook } from '@/firebase/firebase';
 import { checkIsbn } from '@/utils/checkIsbn';
 import { getThumbnailLink } from '@/utils/getThumbnailLink';
-import classes from './edit.Form.module.css';
+import classes from './editBookForm.module.css';
 
 interface IEditFormProps {
   setIsEditBookModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,54 +17,40 @@ export default function EditForm({
   setIsEditBookModalOpen,
   editBook,
 }: IEditFormProps) {
-  const formik = useFormik({
-    initialValues: {
-      title: editBook?.name ? editBook.name : '',
-      author: editBook?.author ? editBook.author : '',
-      year: editBook?.year ? editBook.year : '',
-      rating: editBook?.rating ? editBook.rating : '',
-      isbn: editBook?.isbn ? editBook?.isbn.replace(/✔️|❌/g, '') : '',
-    },
+  const handleSubmit = async (values: any) => {
+    setIsEditBookModalOpen(false);
+    setIsLoaderOn(true);
+    if (editBook) {
+      updateBook(
+        {
+          name: (values.title as string).trim(),
+          author: values.author.trim(),
+          year: Number(values.year),
+          rating: Number(values.rating),
+          isbn: await checkIsbn(values.isbn as string).then(result => result),
+          imageLink: await getThumbnailLink(values.title as string).then(
+            result => result,
+          ),
+        },
 
-    validationSchema: Yup.object({
-      title: Yup.string()
-        .max(100, 'Must be 100 characters or less')
-        .required('Required'),
-      author: Yup.string().required('Required'),
-      year: Yup.number()
-        .typeError('Enter a  number greater than 1800')
-        .min(1800, 'Must be greater than 1800'),
-      rating: Yup.number()
-        .typeError('Enter a  number 1-10')
-        .min(0, 'Must be a positive number')
-        .max(10, 'Should less than 10'),
-      isbn: Yup.string()
-        .min(13, 'must be at least 13 characters long')
-        .max(17, 'must be max 17 characters long')
-        .matches(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/, 'error '),
-    }),
+        editBook.id,
+      ).finally(() => setIsLoaderOn(false));
+    }
+    formik.resetForm();
+  };
 
-    onSubmit: async values => {
-      setIsEditBookModalOpen(false);
-      setIsLoaderOn(true);
-      if (editBook) {
-        updateBook(
-          {
-            name: (values.title as string).trim(),
-            author: values.author.trim(),
-            year: Number(values.year),
-            rating: Number(values.rating),
-            isbn: await checkIsbn(values.isbn as string).then(result => result),
-            imageLink: await getThumbnailLink(values.title as string).then(
-              result => result,
-            ),
-          },
+  const initialValues = {
+    title: editBook?.name ? editBook.name : '',
+    author: editBook?.author ? editBook.author : '',
+    year: editBook?.year ? editBook.year : '',
+    rating: editBook?.rating ? editBook.rating : '',
+    isbn: editBook?.isbn ? editBook?.isbn.replace(/✔️|❌/g, '') : '',
+  };
 
-          editBook.id,
-        ).finally(() => setIsLoaderOn(false));
-      }
-    },
-  });
+  const formik = useHandleBookFormik(
+    { onSubmit: handleSubmit },
+    { initialValues },
+  );
 
   return (
     <form className={classes.editForm} onSubmit={formik.handleSubmit}>

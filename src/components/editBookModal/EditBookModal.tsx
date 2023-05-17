@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSpring, animated } from 'react-spring';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
-import EditForm from '../editForm/EditForm';
+import EditForm from '../editBookForm/EditBookForm';
 import { IBook } from '@/types/IBook';
 import classes from './editBookModal.module.css';
 

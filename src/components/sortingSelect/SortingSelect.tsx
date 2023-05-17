@@ -19,7 +19,7 @@ function SortingSelect({ setSortingType, sortingType }: ISelectsProps) {
         value={sortingType}
         label="Sorting"
         onChange={e => {
-          setSortingType(e.target.value);
+          setSortingType(e.target.value as keyof IBook);
         }}>
         <MenuItem value="year">Year</MenuItem>
         <MenuItem value="rating">Rating</MenuItem>

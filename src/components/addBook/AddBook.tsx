@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { memo } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
 import { Card } from '@mui/material';
 import { Button } from '@mui/material';
@@ -9,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { addBook } from '@/firebase/firebase';
 import { getThumbnailLink } from '@/utils/getThumbnailLink';
 import { checkIsbn } from '@/utils/checkIsbn';
+import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import classes from './addBook.module.css';
 
 function AddBook({
@@ -16,48 +14,36 @@ function AddBook({
 }: {
   setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const formik = useFormik({
-    initialValues: {
-      title: '',
-      author: '',
-      year: '',
-      rating: '',
-      isbn: '',
-    },
+  const handleSubmit = async (values: any) => {
+    setIsLoaderOn(true);
+    addBook({
+      name: (values.title as any).trim(),
+      author: values.author.trim(),
+      year: Number(values.year),
+      rating: Number(values.rating),
+      isbn: await checkIsbn(values.isbn).then(result => result),
+      imageLink: await getThumbnailLink(values.title as any).then(
+        result => result,
+      ),
+    }).finally(() => setIsLoaderOn(false));
+    formik.resetForm();
+  };
 
-    validationSchema: Yup.object({
-      title: Yup.string()
-        .max(100, 'Must be 100 characters or less')
-        .required('Required'),
-      author: Yup.string().required('Required'),
-      year: Yup.number()
-        .typeError('Enter a  number greater than 1800')
-        .min(1800, 'Must be greater than 1800'),
-      rating: Yup.number()
-        .typeError('Enter a  number 0-10')
-        .min(0, 'Must be a positive number')
-        .max(10, 'Should less than 10'),
-      isbn: Yup.string()
-        .min(13, 'must be at least 13 characters long')
-        .max(17, 'must be max 17 characters long')
-        .matches(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/, 'error '),
-    }),
+  const initialValues = {
+    title: '',
+    author: '',
+    year: '',
+    rating: '',
+    isbn: '',
+  };
 
-    onSubmit: async values => {
-      setIsLoaderOn(true);
-      addBook({
-        name: (values.title as any).trim(),
-        author: values.author.trim(),
-        year: Number(values.year),
-        rating: Number(values.rating),
-        isbn: await checkIsbn(values.isbn).then(result => result),
-        imageLink: await getThumbnailLink(values.title as any).then(
-          result => result,
-        ),
-      }).finally(() => setIsLoaderOn(false)),
-        formik.resetForm();
+  const formik = useHandleBookFormik(
+    {
+      onSubmit: handleSubmit,
     },
-  });
+    { initialValues: initialValues },
+  );
+
   return (
     <Card className={classes.addBookCard}>
       <form className={classes.addBookForm} onSubmit={formik.handleSubmit}>
