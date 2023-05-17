@@ -1,15 +1,14 @@
-import { IBook } from '@/types/IBook';
-import { fromDto, toDto } from '@/types/mapper';
 import { initializeApp } from 'firebase/app';
 import {
   getFirestore,
   collection,
-  getDoc,
   doc,
   addDoc,
   deleteDoc,
   updateDoc,
 } from 'firebase/firestore';
+import { toast } from 'react-hot-toast';
+import { BookOmitId, IBook } from '@/types/IBook';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -26,23 +25,38 @@ const db = getFirestore(app);
 
 export const colRef = collection(db, 'books');
 
-export async function setDoc(value: IBook): Promise<string> {
-  const docRef = await addDoc(colRef, value);
-  return docRef.id;
+export async function addBook(newBook: BookOmitId): Promise<void> {
+  try {
+    await addDoc(colRef, newBook).then(() =>
+      toast.success('Book added successfully!'),
+    );
+  } catch (error: any) {
+    console.log(error.message);
+    toast.error('Error: no books with this title');
+  }
 }
 
-export async function deleteBook(id: string): Promise<void> {
-  await deleteDoc(doc(db, 'books', id));
+export async function deleteBook(deletedBook: IBook): Promise<void> {
+  try {
+    await deleteDoc(doc(db, 'books', deletedBook.id)).then(() =>
+      toast.success('Book deleted successfully!'),
+    );
+  } catch (error: any) {
+    console.log(error.message);
+    toast.error('Error: could not delete book');
+  }
 }
 
-export async function getDocById(id: string): Promise<IBook> {
-  const document = await getDoc(doc(db, 'books', id));
-  return fromDto(document.data(), id);
-}
-
-export async function updateDocById(
-  updatedBook: IBook,
+export async function updateBook(
+  updatedBook: BookOmitId,
   id: string,
 ): Promise<void> {
-  await updateDoc(doc(db, 'books', id), toDto(updatedBook));
+  try {
+    await updateDoc(doc(db, 'books', id), updatedBook).then(() =>
+      toast.success('Book updated successfully!'),
+    );
+  } catch (error: any) {
+    console.log(error.message);
+    toast.error('Error: could not update book');
+  }
 }

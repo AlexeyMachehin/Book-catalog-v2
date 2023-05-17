@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { deleteBook } from '@/firebase/firebase';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -8,7 +9,17 @@ import Typography from '@mui/material/Typography';
 import { IBook } from '@/types/IBook';
 import classes from './BookCard.module.css';
 
-function BookCard({ book }: { book: IBook }) {
+interface IBookCardProps {
+  setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
+  handleOpenBookModal: any;
+  book: IBook;
+}
+
+function BookCard({
+  book,
+  handleOpenBookModal,
+  setIsLoaderOn,
+}: IBookCardProps) {
   const { ref, inView } = useInView({
     triggerOnce: true,
   });
@@ -62,7 +73,7 @@ function BookCard({ book }: { book: IBook }) {
       <CardActions>
         <Button
           onClick={() => {
-            // props.handleOpenModal(props.book);
+            handleOpenBookModal(book);
           }}
           size="large">
           Edit
@@ -70,7 +81,8 @@ function BookCard({ book }: { book: IBook }) {
 
         <Button
           onClick={() => {
-            console.log(1);
+            setIsLoaderOn(true);
+            deleteBook(book).finally(() => setIsLoaderOn(false));
           }}
           size="large">
           Delete

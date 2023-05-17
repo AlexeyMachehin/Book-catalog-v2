@@ -2,16 +2,29 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { Button, TextField, Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
+import { updateBook } from '@/firebase/firebase';
+import { checkIsbn } from '@/utils/checkIsbn';
+import { getThumbnailLink } from '@/utils/getThumbnailLink';
 import classes from './edit.Form.module.css';
 
-export default function EditForm({ book }: { book: IBook }) {
+interface IEditFormProps {
+  setIsEditBookModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
+  editBook: IBook | null;
+}
+
+export default function EditForm({
+  setIsLoaderOn,
+  setIsEditBookModalOpen,
+  editBook,
+}: IEditFormProps) {
   const formik = useFormik({
     initialValues: {
-      title: book.name,
-      author: book.author,
-      year: book.year === 0 ? '' : book.year,
-      rating: book.rating,
-      isbn: book.isbn.replace(/✔️|❌/g, ''),
+      title: editBook?.name ? editBook.name : '',
+      author: editBook?.author ? editBook.author : '',
+      year: editBook?.year ? editBook.year : '',
+      rating: editBook?.rating ? editBook.rating : '',
+      isbn: editBook?.isbn ? editBook?.isbn.replace(/✔️|❌/g, '') : '',
     },
 
     validationSchema: Yup.object({
@@ -33,22 +46,24 @@ export default function EditForm({ book }: { book: IBook }) {
     }),
 
     onSubmit: async values => {
-      // props.handleCloseModal();
-      // dispatch(
-      //   updateBook({
-      //     book: {
-      //       name: (values.title as any).trim(),
-      //       author: values.author.trim(),
-      //       year: Number(values.year),
-      //       rating: Number(values.rating),
-      //       isbn: await checkIsbn(values.isbn).then(result => result),
-      //       imageLink: await getThumbnailLink(values.title as any).then(
-      //         result => result,
-      //       ),
-      //     },
-      //     id: props.book.id,
-      //   }),
-      // );
+      setIsEditBookModalOpen(false);
+      setIsLoaderOn(true);
+      if (editBook) {
+        updateBook(
+          {
+            name: (values.title as string).trim(),
+            author: values.author.trim(),
+            year: Number(values.year),
+            rating: Number(values.rating),
+            isbn: await checkIsbn(values.isbn as string).then(result => result),
+            imageLink: await getThumbnailLink(values.title as string).then(
+              result => result,
+            ),
+          },
+
+          editBook.id,
+        ).finally(() => setIsLoaderOn(false));
+      }
     },
   });
 

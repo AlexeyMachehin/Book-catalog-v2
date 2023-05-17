@@ -3,6 +3,7 @@ import { useSpring, animated } from 'react-spring';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import EditForm from '../editForm/EditForm';
+import { IBook } from '@/types/IBook';
 import classes from './editBookModal.module.css';
 
 interface FadeProps {
@@ -39,24 +40,37 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
   );
 });
 
-export default function EditBookModal(props) {
+interface IEditBookModalProps {
+  editBook: IBook | null;
+  isEditBookModalOpen: boolean;
+  setIsEditBookModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function EditBookModal({
+  editBook,
+  isEditBookModalOpen,
+  setIsEditBookModalOpen,
+  setIsLoaderOn,
+}: IEditBookModalProps) {
   return (
     <div>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
-        open={props.open}
-        onClose={props.handleCloseModal}
+        open={isEditBookModalOpen}
+        onClose={() => setIsEditBookModalOpen(false)}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}>
-        <Fade in={props.open}>
+        <Fade in={isEditBookModalOpen}>
           <div className={classes.background}>
             <EditForm
-              handleCloseModal={props.handleCloseModal}
-              book={props.book}
+              setIsLoaderOn={setIsLoaderOn}
+              setIsEditBookModalOpen={setIsEditBookModalOpen}
+              editBook={editBook}
             />
           </div>
         </Fade>

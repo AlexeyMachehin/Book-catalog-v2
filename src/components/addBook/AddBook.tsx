@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { memo } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -5,9 +6,16 @@ import TextField from '@mui/material/TextField';
 import { Card } from '@mui/material';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import { addBook } from '@/firebase/firebase';
+import { getThumbnailLink } from '@/utils/getThumbnailLink';
+import { checkIsbn } from '@/utils/checkIsbn';
 import classes from './addBook.module.css';
 
-function AddBook() {
+function AddBook({
+  setIsLoaderOn,
+}: {
+  setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -26,7 +34,7 @@ function AddBook() {
         .typeError('Enter a  number greater than 1800')
         .min(1800, 'Must be greater than 1800'),
       rating: Yup.number()
-        .typeError('Enter a  number 1-10')
+        .typeError('Enter a  number 0-10')
         .min(0, 'Must be a positive number')
         .max(10, 'Should less than 10'),
       isbn: Yup.string()
@@ -36,19 +44,18 @@ function AddBook() {
     }),
 
     onSubmit: async values => {
-      // dispatch(
-      //   setNewBook({
-      //     name: (values.title as any).trim(),
-      //     author: values.author.trim(),
-      //     year: Number(values.year),
-      //     rating: Number(values.rating),
-      //     isbn: await checkIsbn(values.isbn).then(result => result),
-      //     imageLink: await getThumbnailLink(values.title as any).then(
-      //       result => result,
-      //     ),
-      //   }),
-      // );
-      formik.resetForm();
+      setIsLoaderOn(true);
+      addBook({
+        name: (values.title as any).trim(),
+        author: values.author.trim(),
+        year: Number(values.year),
+        rating: Number(values.rating),
+        isbn: await checkIsbn(values.isbn).then(result => result),
+        imageLink: await getThumbnailLink(values.title as any).then(
+          result => result,
+        ),
+      }).finally(() => setIsLoaderOn(false)),
+        formik.resetForm();
     },
   });
   return (
