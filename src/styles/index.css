@@ -4,3 +4,7 @@
 body {
   background-color: var(--app-background);
 }
+
+.error {
+  color: var(--error-color);
+}

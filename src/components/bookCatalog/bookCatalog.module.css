@@ -3,7 +3,6 @@
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px 20px 20px 60px;
-  /* box-shadow: inset 0px 0px 13px 5px rgba(0,0,0,0.1); */
 }
 
 .selectsWrapper {
@@ -13,5 +12,23 @@
   align-items: center;
   gap: 20px;
   width: 100%;
-  margin: 20px 0;
+  margin: 40px 0;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.recommendedBookWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.recommendedBookTitle {
+  margin-bottom: 10px !important;
 }
