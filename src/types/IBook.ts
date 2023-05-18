@@ -4,7 +4,7 @@ export interface IBook {
   year: number;
   rating: number;
   isbn: string;
-  imageLink: string;
+  imageLink: string | null;
   id: string;
 }
 

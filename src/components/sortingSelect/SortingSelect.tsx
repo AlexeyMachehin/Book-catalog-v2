@@ -2,12 +2,12 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { IBook } from '@/types/IBook';
 import { memo } from 'react';
+import { SortingType } from '@/types/sortingType';
 
 interface ISelectsProps {
-  setSortingType: React.Dispatch<React.SetStateAction<keyof IBook>>;
-  sortingType: keyof IBook;
+  setSortingType: React.Dispatch<React.SetStateAction<SortingType>>;
+  sortingType: SortingType;
 }
 
 function SortingSelect({ setSortingType, sortingType }: ISelectsProps) {
@@ -19,7 +19,7 @@ function SortingSelect({ setSortingType, sortingType }: ISelectsProps) {
         value={sortingType}
         label="Sorting"
         onChange={e => {
-          setSortingType(e.target.value as keyof IBook);
+          setSortingType(e.target.value as SortingType);
         }}>
         <MenuItem value="year">Year</MenuItem>
         <MenuItem value="rating">Rating</MenuItem>

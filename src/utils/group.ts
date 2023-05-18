@@ -1,6 +1,7 @@
 import { IBook } from '@/types/IBook';
+import { SortingType } from '@/types/sortingType';
 
-export function group(books: IBook[], sortingType: keyof IBook): IBook[][] {
+export function group(books: IBook[], sortingType: SortingType): IBook[][] {
   let sortBy = '';
   const groupsSet: Set<string | number> = new Set();
   const result: IBook[][] = [];
@@ -38,8 +39,8 @@ export function group(books: IBook[], sortingType: keyof IBook): IBook[][] {
           return a[sortBy].toLowerCase().localeCompare(b[sortBy].toLowerCase());
         } else {
           return (
-            (a[sortBy as keyof IBook] as number) -
-            (b[sortBy as keyof IBook] as number)
+            (a[sortBy as SortingType] as number) -
+            (b[sortBy as SortingType] as number)
           );
         }
       });

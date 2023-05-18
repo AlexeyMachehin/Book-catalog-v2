@@ -6,18 +6,19 @@ import NavigateMenu from '../navigateMenu/NavigateMenu';
 import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
 import AddBook from '../addBook/AddBook';
 import Loader from '../loader/Loader';
-import EditBookModal from '../editBookModal/EditBookModal';
 import BookCard from '../bookCard/BookCard';
+import EditBookModal from '../editBookModal/EditBookModal';
 import { Typography } from '@mui/material';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
 import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
+import { SortingType } from '@/types/sortingType';
 import classes from './bookCatalog.module.css';
 
 export default function BookCatalog() {
   const [books, setBooks] = useState<IBook[]>([]);
-  const [sortingType, setSortingType] = useState<keyof IBook>('year');
+  const [sortingType, setSortingType] = useState<SortingType>('year');
   const [recommendedBook, setRecommendedBook] = useState<IBook | null>(null);
   const [isEditBookModalOpen, setIsEditBookModalOpen] = useState(false);
   const [editBook, setEditBook] = useState<IBook | null>(null);
@@ -29,17 +30,24 @@ export default function BookCatalog() {
   }
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(colRef, snapshot => {
-      const booksData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as IBook[];
+    const unsubscribe = onSnapshot(
+      colRef,
+      snapshot => {
+        const booksData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as IBook[];
 
-      if (booksData) {
-        setBooks(booksData);
-        setRecommendedBook(generateRecommendedBook(booksData));
-      }
-    });
+        if (booksData) {
+          setBooks(booksData);
+          setRecommendedBook(generateRecommendedBook(booksData));
+        }
+      },
+      error => {
+        console.log(error.message);
+        toast.error('Error while loading books');
+      },
+    );
 
     return () => unsubscribe();
   }, []);
@@ -68,7 +76,7 @@ export default function BookCatalog() {
               component="h4">
               Recommended book
             </Typography>
-            
+
             <BookCard
               setIsLoaderOn={setIsLoaderOn}
               handleOpenBookModal={handleOpenBookModal}

@@ -30,7 +30,7 @@ export const useHandleBookFormik = (
       .min(0, 'Should be 0-10')
       .max(10, 'Should be 0-10'),
     isbn: Yup.string()
-      .min(13, 'must be at least 13 characters long')
+      .min(10, 'must be at least 13 characters long')
       .max(17, 'must be max 17 characters long')
       .matches(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/, 'error '),
   });
