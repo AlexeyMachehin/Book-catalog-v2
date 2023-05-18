@@ -4,7 +4,7 @@ import { Card } from '@mui/material';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { addBook } from '@/firebase/firebase';
-import { getThumbnailLink } from '@/utils/getThumbnailLink';
+import { getBookCoverLink } from '@/utils/getBookCoverLink';
 import { checkIsbn } from '@/utils/checkIsbn';
 import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import classes from './addBook.module.css';
@@ -16,16 +16,18 @@ function AddBook({
 }) {
   const handleSubmit = async (values: any) => {
     setIsLoaderOn(true);
+
     addBook({
       name: (values.title as any).trim(),
       author: values.author.trim(),
       year: Number(values.year),
       rating: Number(values.rating),
       isbn: await checkIsbn(values.isbn).then(result => result),
-      imageLink: await getThumbnailLink(values.title as any).then(
+      imageLink: await getBookCoverLink(values.title, values.author).then(
         result => result,
       ),
     }).finally(() => setIsLoaderOn(false));
+
     formik.resetForm();
   };
 

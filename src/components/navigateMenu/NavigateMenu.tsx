@@ -4,10 +4,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
+import { SortingType } from '@/types/sortingType';
 import classes from './navigateMenu.module.css';
 
 interface ISelectsProps {
-  sortingType: keyof IBook;
+  sortingType: SortingType;
   books: IBook[];
 }
 

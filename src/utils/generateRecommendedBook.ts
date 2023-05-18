@@ -1,41 +1,19 @@
 import { IBook } from '@/types/IBook';
 
-export function generateRecommendedBook(allBooks: IBook[]): IBook {
-  const currentDate = new Date();
+export function generateRecommendedBook(books: IBook[]): IBook | null {
+  const currentYear = new Date().getUTCFullYear();
 
-  const currentYear = currentDate.getUTCFullYear();
+  const sortedByYear = books.filter(book => book.year <= currentYear - 3);
 
-  let index = 0;
-
-  const sortedByYear: IBook[] = [];
-
-  allBooks.forEach(book => {
-    if (book.year <= currentYear - 2) {
-      sortedByYear.push(book);
-    }
-  });
-
-  let maxRating = 0;
-
-  sortedByYear.forEach(book => {
-    if (book.rating > maxRating) {
-      maxRating = book.rating;
-    }
-  });
-
-  const sortedByRating: IBook[] = [];
-
-  sortedByYear.filter(book => {
-    if (book.rating === maxRating) {
-      sortedByRating.push(book);
-    }
-  });
-
-  if (sortedByRating.length > 1) {
-    index = Math.floor(Math.random() * sortedByRating.length);
-
-    return sortedByRating[index];
-  } else {
-    return sortedByRating[index];
+  if (sortedByYear.length === 0) {
+    return null;
   }
+
+  const maxRating = Math.max(...sortedByYear.map(book => book.rating));
+
+  const sortedByRating = sortedByYear.filter(book => book.rating === maxRating);
+
+  const randomIndex = Math.floor(Math.random() * sortedByRating.length);
+
+  return sortedByRating[randomIndex];
 }

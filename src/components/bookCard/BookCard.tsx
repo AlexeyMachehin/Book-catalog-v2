@@ -27,14 +27,14 @@ function BookCard({
   return (
     <Card component="article" ref={ref} className={classes.card}>
       <div className={classes.imgContainer}>
-        {inView ? (
+        {inView && book.imageLink ? (
           <img
             src={book.imageLink}
             alt={`book:${book.name}`}
             className={classes.cardImg}
           />
         ) : (
-          <div className={classes.cardImg}>Loading img...</div>
+          <div className={classes.cardImg}>No cover</div>
         )}
       </div>
       <CardContent>

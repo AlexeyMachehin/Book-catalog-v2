@@ -3,7 +3,7 @@ import { Button, TextField, Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
 import { updateBook } from '@/firebase/firebase';
 import { checkIsbn } from '@/utils/checkIsbn';
-import { getThumbnailLink } from '@/utils/getThumbnailLink';
+import { getBookCoverLink } from '@/utils/getBookCoverLink';
 import classes from './editBookForm.module.css';
 
 interface IEditFormProps {
@@ -20,6 +20,7 @@ export default function EditForm({
   const handleSubmit = async (values: any) => {
     setIsEditBookModalOpen(false);
     setIsLoaderOn(true);
+
     if (editBook) {
       updateBook(
         {
@@ -27,15 +28,17 @@ export default function EditForm({
           author: values.author.trim(),
           year: Number(values.year),
           rating: Number(values.rating),
-          isbn: await checkIsbn(values.isbn as string).then(result => result),
-          imageLink: await getThumbnailLink(values.title as string).then(
-            result => result,
-          ),
+          isbn: await checkIsbn(values.isbn),
+          imageLink: await getBookCoverLink(
+            values.title as string,
+            values.author as string,
+          ).then(result => result),
         },
 
         editBook.id,
       ).finally(() => setIsLoaderOn(false));
     }
+
     formik.resetForm();
   };
 

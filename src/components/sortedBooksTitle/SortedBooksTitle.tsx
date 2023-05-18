@@ -1,11 +1,12 @@
 import { memo } from 'react';
 import { Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
+import { SortingType } from '@/types/sortingType';
 import classes from './sortedBooksTitle.module.css';
 
 interface ISortedBooksTitleProps {
   books: IBook[];
-  sortingType: keyof IBook;
+  sortingType: SortingType;
 }
 
 function SortedBooksTitle({ books, sortingType }: ISortedBooksTitleProps) {
