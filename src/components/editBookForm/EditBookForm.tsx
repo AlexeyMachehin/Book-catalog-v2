@@ -1,6 +1,6 @@
 import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import { Button, TextField, Typography } from '@mui/material';
-import { IBook } from '@/types/IBook';
+import { NewBook, IBook } from '@/types/IBook';
 import { updateBook } from '@/firebase/firebase';
 import { getBookCoverLink } from '@/utils/getBookCoverLink';
 import classes from './editBookForm.module.css';
@@ -16,14 +16,14 @@ export default function EditForm({
   setIsEditBookModalOpen,
   editBook,
 }: IEditFormProps) {
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: NewBook) => {
     setIsEditBookModalOpen(false);
     setIsLoaderOn(true);
 
     if (editBook) {
       updateBook(
         {
-          name: (values.title as string).trim(),
+          title: (values.title as string).trim(),
           author: values.author.trim(),
           year: Number(values.year),
           rating: Number(values.rating),
@@ -42,11 +42,12 @@ export default function EditForm({
   };
 
   const initialValues = {
-    title: editBook?.name ? editBook.name : '',
+    title: editBook?.title ? editBook.title : '',
     author: editBook?.author ? editBook.author : '',
-    year: editBook?.year ? editBook.year : '',
-    rating: editBook?.rating ? editBook.rating : '',
-    isbn: editBook?.isbn ? editBook?.isbn.replace(/✔️|❌/g, '') : '',
+    year: editBook?.year ? editBook.year : null,
+    rating: editBook?.rating ? editBook.rating : null,
+    isbn: editBook?.isbn ? editBook?.isbn : '',
+    imageLink: editBook?.imageLink ? editBook?.imageLink : '',
   };
 
   const formik = useHandleBookFormik(
@@ -91,7 +92,7 @@ export default function EditForm({
         label="year"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
-        value={formik.values.year}
+        value={formik.values.year == null ? '' : formik.values.year}
         error={formik.touched.year && Boolean(formik.errors.year)}
       />
 
@@ -104,7 +105,7 @@ export default function EditForm({
         label="rating"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
-        value={formik.values.rating}
+        value={formik.values.rating == null ? '' : formik.values.rating}
         error={formik.touched.rating && Boolean(formik.errors.rating)}
       />
 

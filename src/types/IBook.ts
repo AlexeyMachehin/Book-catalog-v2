@@ -1,11 +1,13 @@
 export interface IBook {
   author: string;
-  name: string;
-  year: number;
-  rating: number;
+  title: string;
+  year: number | null;
+  rating: number | null;
   isbn: string;
   imageLink: string | null;
   id: string;
 }
 
-export type BookOmitId = Omit<IBook, 'id'>;
+export type NewBook = Omit<IBook, 'id'>;
+
+export type FormikValues = Omit<IBook, 'id' | 'imageLink'>;

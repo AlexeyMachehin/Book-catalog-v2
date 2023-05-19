@@ -1,11 +1,12 @@
 import { memo } from 'react';
+import { addBook } from '@/firebase/firebase';
+import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
+import { getBookCoverLink } from '@/utils/getBookCoverLink';
 import TextField from '@mui/material/TextField';
 import { Card } from '@mui/material';
 import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { addBook } from '@/firebase/firebase';
-import { getBookCoverLink } from '@/utils/getBookCoverLink';
-import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
+import { NewBook } from '@/types/IBook';
 import classes from './addBook.module.css';
 
 function AddBook({
@@ -13,11 +14,11 @@ function AddBook({
 }: {
   setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: NewBook) => {
     setIsLoaderOn(true);
 
     addBook({
-      name: (values.title as any).trim(),
+      title: values.title.trim(),
       author: values.author.trim(),
       year: Number(values.year),
       rating: Number(values.rating),
@@ -33,16 +34,17 @@ function AddBook({
   const initialValues = {
     title: '',
     author: '',
-    year: '',
-    rating: '',
+    year: null,
+    rating: null,
     isbn: '',
+    imageLink: '',
   };
 
   const formik = useHandleBookFormik(
     {
       onSubmit: handleSubmit,
     },
-    { initialValues: initialValues },
+    { initialValues },
   );
 
   return (
@@ -83,7 +85,7 @@ function AddBook({
           label="year"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.year}
+          value={formik.values.year == null ? '' : formik.values.year}
           error={formik.touched.year && Boolean(formik.errors.year)}
         />
 
@@ -96,7 +98,7 @@ function AddBook({
           label="rating"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.rating}
+          value={formik.values.rating == null ? '' : formik.values.rating}
           error={formik.touched.rating && Boolean(formik.errors.rating)}
         />
 

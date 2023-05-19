@@ -10,7 +10,8 @@ export async function getBookCoverLink(
 
   if (data.items) {
     const itemWithCover = data.items.find(
-      (item: any) => item.volumeInfo.imageLinks,
+      (item: { volumeInfo: { imageLinks: string } }) =>
+        item.volumeInfo.imageLinks,
     );
 
     return itemWithCover?.volumeInfo.imageLinks.thumbnail || null;
