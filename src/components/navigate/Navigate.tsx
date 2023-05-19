@@ -5,14 +5,14 @@ import MenuItem from '@mui/material/MenuItem';
 import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
 import { SortingType } from '@/types/sortingType';
-import classes from './navigateMenu.module.css';
+import classes from './navigate.module.css';
 
 interface ISelectsProps {
   sortingType: SortingType;
   books: IBook[];
 }
 
-export default function NavigateMenu({ sortingType, books }: ISelectsProps) {
+export default function Navigate({ sortingType, books }: ISelectsProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -33,6 +33,7 @@ export default function NavigateMenu({ sortingType, books }: ISelectsProps) {
         onClick={handleClick}>
         Navigate
       </Button>
+
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -42,7 +43,7 @@ export default function NavigateMenu({ sortingType, books }: ISelectsProps) {
           'aria-labelledby': 'basic-button',
         }}>
         {books.length !== 0 &&
-          group(books, sortingType).map((booksGroup: any) => {
+          group(books, sortingType).map((booksGroup: IBook[]) => {
             return (
               <MenuItem
                 className={classes.navigateItem}

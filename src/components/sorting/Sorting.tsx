@@ -10,7 +10,7 @@ interface ISelectsProps {
   sortingType: SortingType;
 }
 
-function SortingSelect({ setSortingType, sortingType }: ISelectsProps) {
+function Sorting({ setSortingType, sortingType }: ISelectsProps) {
   return (
     <FormControl>
       <InputLabel id="sorting-label">Sorting</InputLabel>
@@ -29,4 +29,4 @@ function SortingSelect({ setSortingType, sortingType }: ISelectsProps) {
   );
 }
 
-export default memo(SortingSelect);
+export default memo(Sorting);

@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { onSnapshot } from 'firebase/firestore';
 import { colRef } from '@/firebase/firebase';
-import SortingSelect from '../sortingSelect/SortingSelect';
-import NavigateMenu from '../navigateMenu/NavigateMenu';
-import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
-import AddBook from '../addBook/AddBook';
 import Loader from '../loader/Loader';
-import BookCard from '../bookCard/BookCard';
 import EditBookModal from '../editBookModal/EditBookModal';
-import { Typography } from '@mui/material';
 import { Toaster, toast } from 'react-hot-toast';
 import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
 import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
 import { SortingType } from '@/types/sortingType';
+import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
+import BookCard from '../bookCard/BookCard';
+import Navigate from '../navigate/Navigate';
+import Sorting from '../sorting/Sorting';
+import AddBook from '../addBook/AddBook';
+import { Typography } from '@mui/material';
 import classes from './bookCatalog.module.css';
 
 export default function BookCatalog() {
@@ -88,14 +88,11 @@ export default function BookCatalog() {
         <AddBook setIsLoaderOn={setIsLoaderOn} />
       </section>
 
-      <div className={classes.selectsWrapper}>
-        <SortingSelect
-          sortingType={sortingType}
-          setSortingType={setSortingType}
-        />
+      <section className={classes.filters}>
+        <Sorting sortingType={sortingType} setSortingType={setSortingType} />
 
-        <NavigateMenu books={books} sortingType={sortingType} />
-      </div>
+        <Navigate books={books} sortingType={sortingType} />
+      </section>
 
       <section>
         {group(books, sortingType).map((booksGroup: IBook[]) => (
