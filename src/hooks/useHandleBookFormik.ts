@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { validateISBN } from '@/utils/checkIsbn';
 
 interface IFormValue {
   title: string;
@@ -30,9 +31,19 @@ export const useHandleBookFormik = (
       .min(0, 'Should be 0-10')
       .max(10, 'Should be 0-10'),
     isbn: Yup.string()
-      .min(10, 'must be at least 13 characters long')
-      .max(17, 'must be max 17 characters long')
-      .matches(/^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/, 'error '),
+    .test({
+      name: 'isISBNValid',
+
+      test: function (value) {
+        const error = validateISBN(value);
+
+        return error
+          ? this.createError({
+              message: error,
+            })
+          : true;
+      },
+    }),
   });
 
   return useFormik({

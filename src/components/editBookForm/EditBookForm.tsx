@@ -2,7 +2,6 @@ import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import { Button, TextField, Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
 import { updateBook } from '@/firebase/firebase';
-import { checkIsbn } from '@/utils/checkIsbn';
 import { getBookCoverLink } from '@/utils/getBookCoverLink';
 import classes from './editBookForm.module.css';
 
@@ -28,7 +27,7 @@ export default function EditForm({
           author: values.author.trim(),
           year: Number(values.year),
           rating: Number(values.rating),
-          isbn: await checkIsbn(values.isbn),
+          isbn: values.isbn,
           imageLink: await getBookCoverLink(
             values.title as string,
             values.author as string,
