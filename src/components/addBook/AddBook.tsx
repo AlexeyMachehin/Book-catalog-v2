@@ -5,7 +5,6 @@ import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { addBook } from '@/firebase/firebase';
 import { getBookCoverLink } from '@/utils/getBookCoverLink';
-import { checkIsbn } from '@/utils/checkIsbn';
 import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import classes from './addBook.module.css';
 
@@ -22,7 +21,7 @@ function AddBook({
       author: values.author.trim(),
       year: Number(values.year),
       rating: Number(values.rating),
-      isbn: await checkIsbn(values.isbn).then(result => result),
+      isbn: values.isbn,
       imageLink: await getBookCoverLink(values.title, values.author).then(
         result => result,
       ),

@@ -54,7 +54,7 @@ export default function BookCatalog() {
 
   return (
     <>
-      {isLoaderOn && <Loader />}
+      {books.length === 0 || isLoaderOn ? <Loader books={books} /> : null}
 
       <Toaster toastOptions={{ duration: 4000 }} />
 
