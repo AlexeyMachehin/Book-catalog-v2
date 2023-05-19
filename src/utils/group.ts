@@ -6,7 +6,10 @@ export function group(books: IBook[], sortingType: SortingType): IBook[][] {
   const result: IBook[][] = [];
 
   books.forEach(book => {
-    groupsSet.add(book[sortingType]);
+    const value = book[sortingType]
+    if (value != null) {
+      groupsSet.add(value);
+    }
   });
 
   const groupsArr = Array.from(groupsSet).sort(
@@ -27,7 +30,7 @@ export function group(books: IBook[], sortingType: SortingType): IBook[][] {
 
   result.forEach((groupForSort: IBook[]) => {
     groupForSort.sort((a: IBook, b: IBook) =>
-      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+      a.title.toLowerCase().localeCompare(b.title.toLowerCase()),
     );
   });
 

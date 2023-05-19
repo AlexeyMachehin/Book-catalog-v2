@@ -11,7 +11,7 @@ import classes from './BookCard.module.css';
 
 interface IBookCardProps {
   setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenBookModal: any;
+  handleOpenBookModal: (book: IBook) => void;
   book: IBook;
 }
 
@@ -30,7 +30,7 @@ function BookCard({
         {inView && book.imageLink ? (
           <img
             src={book.imageLink}
-            alt={`book:${book.name}`}
+            alt={`book:${book.title}`}
             className={classes.cardImg}
           />
         ) : (
@@ -43,7 +43,7 @@ function BookCard({
           gutterBottom
           variant="h5"
           component="h5">
-          Title: {book.name}
+          Title: {book.title}
         </Typography>
         <Typography
           className={classes.bookCardTypography}
@@ -100,7 +100,7 @@ function areBookPropsEqual(
   const nextBook = nextProps.book;
 
   return (
-    prevBook.name === nextBook.name &&
+    prevBook.title === nextBook.title &&
     prevBook.author === nextBook.author &&
     prevBook.imageLink === nextBook.imageLink &&
     prevBook.isbn === nextBook.isbn &&

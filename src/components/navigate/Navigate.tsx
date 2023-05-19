@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { IBook } from '@/types/IBook';
 import { group } from '@/utils/group';
 import { SortingType } from '@/types/sortingType';
+import { Link } from 'react-scroll';
 import classes from './navigate.module.css';
 
 interface ISelectsProps {
@@ -47,17 +48,20 @@ export default function Navigate({ sortingType, books }: ISelectsProps) {
             return (
               <MenuItem
                 className={classes.navigateItem}
-                onClick={handleClose}
                 key={booksGroup[0][sortingType]}
                 value={booksGroup[0][sortingType]}>
                 {
-                  <a
-                    href={`#navigate-${booksGroup[0][sortingType]}`}
+                  <Link
+                    to={`navigate-${booksGroup[0][sortingType]}`}
+                    spy={true}
+                    smooth={true}
+                    onClick={handleClose}
+                    duration={500}
                     className={classes.navigateLink}>
                     {booksGroup[0][sortingType]
                       ? booksGroup[0][sortingType]
                       : 'no grouped'}
-                  </a>
+                  </Link>
                 }
               </MenuItem>
             );

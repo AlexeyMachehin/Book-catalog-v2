@@ -6,7 +6,7 @@ export function validateISBN(isbn?: string): string {
   const cleanedISBN = isbn.replace(/[^0-9Xx]$|[^0-9Xx]+/g, '');
 
   if (cleanedISBN.length !== 10 && cleanedISBN.length !== 13) {
-    return 'Quantity of symbols in the isbn number must be 10 or 13';
+    return 'Quantity of numbers in the isbn number must be 10 or 13';
   }
 
   if (cleanedISBN.length === 10) {

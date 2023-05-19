@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
-import { BookOmitId, IBook } from '@/types/IBook';
+import { NewBook, IBook } from '@/types/IBook';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -25,7 +25,7 @@ const db = getFirestore(app);
 
 export const colRef = collection(db, 'books');
 
-export async function addBook(newBook: BookOmitId): Promise<void> {
+export async function addBook(newBook: NewBook): Promise<void> {
   try {
     await addDoc(colRef, newBook).then(() =>
       toast.success('Book added successfully!'),
@@ -48,7 +48,7 @@ export async function deleteBook(deletedBook: IBook): Promise<void> {
 }
 
 export async function updateBook(
-  updatedBook: BookOmitId,
+  updatedBook: NewBook,
   id: string,
 ): Promise<void> {
   try {
