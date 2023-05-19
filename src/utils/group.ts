@@ -2,15 +2,8 @@ import { IBook } from '@/types/IBook';
 import { SortingType } from '@/types/sortingType';
 
 export function group(books: IBook[], sortingType: SortingType): IBook[][] {
-  let sortBy = '';
   const groupsSet: Set<string | number> = new Set();
   const result: IBook[][] = [];
-
-  if (sortingType === 'author') {
-    sortBy = 'year';
-  } else {
-    sortBy = 'author';
-  }
 
   books.forEach(book => {
     groupsSet.add(book[sortingType]);
@@ -19,7 +12,7 @@ export function group(books: IBook[], sortingType: SortingType): IBook[][] {
   const groupsArr = Array.from(groupsSet).sort(
     (a: string | number, b: string | number) => {
       if (typeof a === 'string' && typeof b === 'string') {
-        return a.localeCompare(b);
+        return a.toLowerCase().localeCompare(b.toLowerCase());
       } else {
         return (b as number) - (a as number);
       }
@@ -32,19 +25,10 @@ export function group(books: IBook[], sortingType: SortingType): IBook[][] {
     result.push(groupedBooks);
   });
 
-  result.forEach((v: IBook[]) => {
-    if (v.length > 1) {
-      v.sort((a: IBook, b: IBook) => {
-        if (sortBy === 'author') {
-          return a[sortBy].toLowerCase().localeCompare(b[sortBy].toLowerCase());
-        } else {
-          return (
-            (a[sortBy as SortingType] as number) -
-            (b[sortBy as SortingType] as number)
-          );
-        }
-      });
-    }
+  result.forEach((groupForSort: IBook[]) => {
+    groupForSort.sort((a: IBook, b: IBook) =>
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+    );
   });
 
   return result;
