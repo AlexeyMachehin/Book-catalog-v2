@@ -48,8 +48,7 @@ export default function Navigate({ sortingType, books }: ISelectsProps) {
             return (
               <MenuItem
                 className={classes.navigateItem}
-                key={booksGroup[0][sortingType]}
-                value={booksGroup[0][sortingType]}>
+                key={booksGroup[0][sortingType]}>
                 {
                   <Link
                     to={`navigate-${booksGroup[0][sortingType]}`}
