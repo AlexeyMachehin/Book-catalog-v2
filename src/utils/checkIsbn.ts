@@ -16,11 +16,9 @@ export function validateISBN(isbn?: string): string {
       return 'ISBN must be 10 numbers or 9 numbers + "X"';
     }
 
-    let sum = 0;
-
-    for (let i = 0; i < 9; i++) {
-      sum += parseInt(cleanedISBN.charAt(i)) * (10 - i);
-    }
+    let sum = [...cleanedISBN].slice(0, 9).reduce((acc, char, index) => {
+      return acc + parseInt(char) * (10 - index);
+    }, 0);
 
     const lastChar = cleanedISBN.charAt(9);
 
@@ -42,11 +40,9 @@ export function validateISBN(isbn?: string): string {
       return 'ISBN must be 13 numbers';
     }
 
-    let sum = 0;
-
-    for (let i = 0; i < 12; i++) {
-      sum += parseInt(cleanedISBN.charAt(i)) * (i % 2 === 0 ? 1 : 3);
-    }
+    const sum = [...cleanedISBN].slice(0, 12).reduce((acc, char, index) => {
+      return acc + parseInt(char) * (index % 2 === 0 ? 1 : 3);
+    }, 0);
 
     const lastDigit = parseInt(cleanedISBN.charAt(12));
     if ((10 - (sum % 10)) % 10 !== lastDigit) {

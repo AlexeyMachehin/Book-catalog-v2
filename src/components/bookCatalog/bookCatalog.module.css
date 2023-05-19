@@ -31,4 +31,6 @@
 
 .recommendedBookTitle {
   margin-bottom: 10px !important;
+  font-size: 30px;
+  font-weight: 400;
 }

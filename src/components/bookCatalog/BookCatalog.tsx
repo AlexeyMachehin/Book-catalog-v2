@@ -13,7 +13,6 @@ import BookCard from '../bookCard/BookCard';
 import Navigate from '../navigate/Navigate';
 import Sorting from '../sorting/Sorting';
 import AddBook from '../addBook/AddBook';
-import { Typography } from '@mui/material';
 import classes from './bookCatalog.module.css';
 
 export default function BookCatalog() {
@@ -70,12 +69,7 @@ export default function BookCatalog() {
       <section className={classes.header}>
         {recommendedBook && (
           <div className={classes.recommendedBookWrapper}>
-            <Typography
-              className={classes.recommendedBookTitle}
-              variant="h4"
-              component="h4">
-              Recommended book
-            </Typography>
+            <h4 className={classes.recommendedBookTitle}>Recommended book</h4>
 
             <BookCard
               setIsLoaderOn={setIsLoaderOn}
