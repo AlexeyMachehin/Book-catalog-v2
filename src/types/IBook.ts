@@ -8,6 +8,8 @@ export interface IBook {
   id: string;
 }
 
-export type FormikValues = Omit<IBook, 'id' | 'imageLink'>;
+export type FormikValues = Omit<IBook, 'id' | 'imageLink' | 'author'> & {
+  author: string[],
+};
 
 export type NewBook = Omit<IBook, 'id'>;
