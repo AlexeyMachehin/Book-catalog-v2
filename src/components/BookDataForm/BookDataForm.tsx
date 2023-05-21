@@ -39,6 +39,7 @@ export default function NewBookForm({
           id="author"
           label="Authors"
           clearInputOnBlur
+          addOnWhichKey={['touchend', 'Enter']}
           onChange={value => formik.setFieldValue('author', value)}
           onBlur={formik.handleBlur}
           value={formik.values.author}
