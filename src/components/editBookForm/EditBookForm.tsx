@@ -22,14 +22,14 @@ export default function EditForm({
     if (editBook) {
       updateBook(
         {
-          title: (values.title as string).trim(),
-          author: values.author.trim(),
+          title: values.title.trim(),
+          author: values.author.join(', '),
           year: Number(values.year),
           rating: Number(values.rating),
           isbn: values.isbn,
           imageLink: await getBookCoverLink(
-            values.title as string,
-            values.author as string,
+            values.title,
+            values.author.join(','),
           ).then(result => result),
         },
 
@@ -40,7 +40,7 @@ export default function EditForm({
 
   const initialValues = {
     title: editBook?.title ? editBook.title : '',
-    author: editBook?.author ? editBook.author : '',
+    author: editBook?.author ? editBook.author.split(',') : [],
     year: editBook?.year ? editBook.year : null,
     rating: editBook?.rating ? editBook.rating : null,
     isbn: editBook?.isbn ? editBook?.isbn : '',

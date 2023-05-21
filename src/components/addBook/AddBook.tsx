@@ -15,11 +15,11 @@ function AddBook({
 
     addBook({
       title: values.title.trim(),
-      author: values.author.trim(),
+      author: values.author.join(', '),
       year: Number(values.year),
       rating: Number(values.rating),
       isbn: values.isbn,
-      imageLink: await getBookCoverLink(values.title, values.author).then(
+      imageLink: await getBookCoverLink(values.title, values.author.join(',')).then(
         result => result,
       ),
     }).finally(() => setIsLoaderOn(false));
@@ -28,7 +28,7 @@ function AddBook({
 
   const initialValues = {
     title: '',
-    author: '',
+    author: [],
     year: null,
     rating: null,
     isbn: '',
