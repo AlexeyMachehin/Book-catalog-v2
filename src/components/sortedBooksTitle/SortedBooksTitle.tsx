@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { Typography } from '@mui/material';
 import { IBook } from '@/types/IBook';
 import { SortingType } from '@/types/sortingType';
+import { Typography } from '@mui/material';
 import classes from './sortedBooksTitle.module.css';
 
 interface ISortedBooksTitleProps {

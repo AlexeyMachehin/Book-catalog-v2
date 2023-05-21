@@ -6,7 +6,7 @@ export function group(books: IBook[], sortingType: SortingType): IBook[][] {
   const result: IBook[][] = [];
 
   books.forEach(book => {
-    const value = book[sortingType]
+    const value = book[sortingType];
     if (value != null) {
       groupsSet.add(value);
     }

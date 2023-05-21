@@ -14,6 +14,7 @@ import Navigate from '../navigate/Navigate';
 import Sorting from '../sorting/Sorting';
 import AddBook from '../addBook/AddBook';
 import classes from './bookCatalog.module.css';
+import { Typography } from '@mui/material';
 
 export default function BookCatalog() {
   const [books, setBooks] = useState<IBook[]>([]);
@@ -69,7 +70,9 @@ export default function BookCatalog() {
       <section className={classes.header}>
         {recommendedBook && (
           <div className={classes.recommendedBookWrapper}>
-            <h4 className={classes.recommendedBookTitle}>Recommended book</h4>
+            <Typography gutterBottom variant="h4" component="h4">
+              Recommended book
+            </Typography>
 
             <BookCard
               setIsLoaderOn={setIsLoaderOn}

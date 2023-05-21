@@ -10,7 +10,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 40px;
   width: 100%;
   margin: 40px 0;
 }
@@ -19,7 +19,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 60px;
   padding: 20px;
 }
 
@@ -27,10 +27,4 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.recommendedBookTitle {
-  margin-bottom: 10px !important;
-  font-size: 30px;
-  font-weight: 400;
 }

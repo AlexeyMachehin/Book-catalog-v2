@@ -1,15 +1,11 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { validateISBN } from '@/utils/validateISBN';
-import { NewBook, FormikValues } from '@/types/IBook';
-
-interface IParams {
-  onSubmit(values: FormikValues): void;
-}
+import { FormikValues} from '@/types/IBook';
 
 export const useHandleBookFormik = (
-  { onSubmit }: IParams,
-  { initialValues }: { initialValues: NewBook },
+  onSubmit: (values: FormikValues) => Promise<void>,
+  initialValues: FormikValues,
 ) => {
   const validationSchema = Yup.object({
     title: Yup.string()

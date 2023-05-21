@@ -8,7 +8,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
-import { NewBook, IBook } from '@/types/IBook';
+import { IBook, NewBook } from '@/types/IBook';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -30,9 +30,9 @@ export async function addBook(newBook: NewBook): Promise<void> {
     await addDoc(colRef, newBook).then(() =>
       toast.success('Book added successfully!'),
     );
-  } catch (error: any) {
-    console.log(error.message);
-    toast.error('Error: no books with this title');
+  } catch (error: unknown) {
+    
+    toast.error('Error: could not add new book');
   }
 }
 
@@ -41,8 +41,7 @@ export async function deleteBook(deletedBook: IBook): Promise<void> {
     await deleteDoc(doc(db, 'books', deletedBook.id)).then(() =>
       toast.success('Book deleted successfully!'),
     );
-  } catch (error: any) {
-    console.log(error.message);
+  } catch (error: unknown) {
     toast.error('Error: could not delete book');
   }
 }
@@ -55,8 +54,7 @@ export async function updateBook(
     await updateDoc(doc(db, 'books', id), updatedBook).then(() =>
       toast.success('Book updated successfully!'),
     );
-  } catch (error: any) {
-    console.log(error.message);
+  } catch (error: unknown) {
     toast.error('Error: could not update book');
   }
 }
