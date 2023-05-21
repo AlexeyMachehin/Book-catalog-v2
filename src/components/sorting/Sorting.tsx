@@ -1,8 +1,8 @@
+import { memo } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { memo } from 'react';
 import { SortingType } from '@/types/sortingType';
 
 interface ISelectsProps {

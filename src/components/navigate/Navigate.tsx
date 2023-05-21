@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { group } from '@/utils/group';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IBook } from '@/types/IBook';
-import { group } from '@/utils/group';
-import { SortingType } from '@/types/sortingType';
 import { Link } from 'react-scroll';
+import { SortingType } from '@/types/sortingType';
 import classes from './navigate.module.css';
 
 interface ISelectsProps {

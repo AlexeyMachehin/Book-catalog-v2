@@ -1,7 +1,7 @@
 :root {
-  --app-background: #eeeeee;
+  --app-background: #eee;
   --divider: #367aa228;
   --divider-text: #424242;
   --error-color: red;
-  --loader-background: rgba(0, 0, 0, 0.529);
+  --loader-background: #eeeeeea1;
 }

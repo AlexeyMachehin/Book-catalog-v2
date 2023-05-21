@@ -1,1 +1,1 @@
-export type SortingType = "year" | "rating" | "author";
+export type SortingType = 'year' | 'rating' | 'author';

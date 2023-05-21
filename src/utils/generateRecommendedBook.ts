@@ -3,7 +3,9 @@ import { IBook } from '@/types/IBook';
 export function generateRecommendedBook(books: IBook[]): IBook | null {
   const currentYear = new Date().getUTCFullYear();
 
-  const sortedByYear = books.filter(book => book.year && book.year <= currentYear - 3);
+  const sortedByYear = books.filter(
+    book => book.year && book.year <= currentYear - 3,
+  );
 
   if (sortedByYear.length === 0) {
     return null;

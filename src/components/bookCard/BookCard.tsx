@@ -1,6 +1,6 @@
-import { memo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { deleteBook } from '@/firebase/firebase';
+import { memo } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -46,8 +46,9 @@ function BookCard({
           Title: {book.title}
         </Typography>
         <Typography
+          variant="h6"
+          component="h6"
           className={classes.bookCardTypography}
-          variant="body2"
           color="text.secondary">
           Author: {book.author}
         </Typography>

@@ -1,9 +1,8 @@
-import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
-import { Button, TextField, Typography } from '@mui/material';
-import { NewBook, IBook } from '@/types/IBook';
 import { updateBook } from '@/firebase/firebase';
 import { getBookCoverLink } from '@/utils/getBookCoverLink';
-import classes from './editBookForm.module.css';
+import BookDataForm from '../BookDataForm/BookDataForm';
+import { Typography } from '@mui/material';
+import { FormikValues, IBook } from '@/types/IBook';
 
 interface IEditFormProps {
   setIsEditBookModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +15,7 @@ export default function EditForm({
   setIsEditBookModalOpen,
   editBook,
 }: IEditFormProps) {
-  const handleSubmit = async (values: NewBook) => {
+  const handleSubmit = async (values: FormikValues) => {
     setIsEditBookModalOpen(false);
     setIsLoaderOn(true);
 
@@ -37,8 +36,6 @@ export default function EditForm({
         editBook.id,
       ).finally(() => setIsLoaderOn(false));
     }
-
-    formik.resetForm();
   };
 
   const initialValues = {
@@ -50,85 +47,13 @@ export default function EditForm({
     imageLink: editBook?.imageLink ? editBook?.imageLink : '',
   };
 
-  const formik = useHandleBookFormik(
-    { onSubmit: handleSubmit },
-    { initialValues },
-  );
-
   return (
-    <form className={classes.editForm} onSubmit={formik.handleSubmit}>
-      <Typography variant="h5">Edit book</Typography>
+    <div>
+      <Typography gutterBottom variant="h5" component="h5">
+        Edit book
+      </Typography>
 
-      <TextField
-        id="title"
-        label="title"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.title}
-        required
-        error={formik.touched.title && Boolean(formik.errors.title)}
-      />
-
-      {formik.touched.title && formik.errors.title ? (
-        <div className="error">{formik.errors.title as string}</div>
-      ) : null}
-
-      <TextField
-        id="author"
-        label="author"
-        required
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.author}
-        error={formik.touched.author && Boolean(formik.errors.author)}
-      />
-
-      {formik.touched.author && formik.errors.author ? (
-        <div className="error">{formik.errors.author as string}</div>
-      ) : null}
-
-      <TextField
-        id="year"
-        label="year"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.year == null ? '' : formik.values.year}
-        error={formik.touched.year && Boolean(formik.errors.year)}
-      />
-
-      {formik.touched.year && formik.errors.year ? (
-        <div className="error">{formik.errors.year as string}</div>
-      ) : null}
-
-      <TextField
-        id="rating"
-        label="rating"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.rating == null ? '' : formik.values.rating}
-        error={formik.touched.rating && Boolean(formik.errors.rating)}
-      />
-
-      {formik.touched.rating && formik.errors.rating ? (
-        <div className="error">{formik.errors.rating as string}</div>
-      ) : null}
-
-      <TextField
-        id="isbn"
-        label="isbn"
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.isbn}
-        error={formik.touched.isbn && Boolean(formik.errors.isbn)}
-      />
-
-      {formik.touched.isbn && formik.errors.isbn ? (
-        <div className="error">{formik.errors.isbn as string}</div>
-      ) : null}
-
-      <Button type="submit" variant="outlined">
-        Submit
-      </Button>
-    </form>
+      <BookDataForm handleSubmit={handleSubmit} initialValues={initialValues} />
+    </div>
   );
 }
