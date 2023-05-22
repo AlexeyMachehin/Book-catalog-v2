@@ -1,5 +1,5 @@
 import { MuiChipsInput } from 'mui-chips-input';
-import { useState } from 'react';
+import { FocusEventHandler } from 'react';
 import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
 import { Button, Card, TextField } from '@mui/material';
 import { FormikValues } from '@/types/IBook';
@@ -14,8 +14,6 @@ export default function NewBookForm({
   handleSubmit,
   initialValues,
 }: INewBookFormProps) {
-  const [chipValue, setChipValue] = useState('');
-
   const onSubmit = async (values: FormikValues) => {
     await handleSubmit(values);
     formik.resetForm();
@@ -23,10 +21,10 @@ export default function NewBookForm({
 
   const formik = useHandleBookFormik(onSubmit, initialValues);
 
-  const handleAuthorsBlur = () => {
-    if (chipValue) {
-      formik.setFieldValue('author', [...formik.values.author, chipValue]);
-      setChipValue('');
+  const handleAuthorsBlur: FocusEventHandler<HTMLInputElement> = event => {
+    const value = (event.target as HTMLInputElement).value;
+    if (value) {
+      formik.setFieldValue('author', [...formik.values.author, value]);
     }
 
     formik.setFieldTouched('author', true);
@@ -51,24 +49,23 @@ export default function NewBookForm({
         <MuiChipsInput
           id="author"
           label="Authors*"
+          clearInputOnBlur
           onChange={value => {
             formik.setFieldValue('author', value);
-            setChipValue('');
           }}
           onBlur={handleAuthorsBlur}
           value={formik.values.author}
           error={
-            formik.touched.author &&
+            (formik.touched.author || formik.dirty) &&
             formik.values.author.length === 0 &&
             Boolean(formik.errors.author)
           }
-          inputValue={chipValue}
-          onInputChange={setChipValue}
         />
 
-        {formik.touched.author && formik.values.author.length === 0 && (
-          <div className="error">{formik.errors.author}</div>
-        )}
+        {(formik.touched.author || formik.dirty) &&
+          formik.values.author.length === 0 && (
+            <div className="error">{formik.errors.author}</div>
+          )}
 
         <TextField
           id="year"
