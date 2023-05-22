@@ -58,7 +58,7 @@ export default function NewBookForm({
           onBlur={handleAuthorsBlur}
           value={formik.values.author}
           error={
-            formik.touched.author &&
+            (formik.touched.author || formik.dirty) &&
             formik.values.author.length === 0 &&
             Boolean(formik.errors.author)
           }
@@ -66,9 +66,10 @@ export default function NewBookForm({
           onInputChange={setChipValue}
         />
 
-        {formik.touched.author && formik.values.author.length === 0 && (
-          <div className="error">{formik.errors.author}</div>
-        )}
+        {(formik.touched.author || formik.dirty) &&
+          formik.values.author.length === 0 && (
+            <div className="error">{formik.errors.author}</div>
+          )}
 
         <TextField
           id="year"
