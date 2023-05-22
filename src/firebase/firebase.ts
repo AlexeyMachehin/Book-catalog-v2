@@ -31,7 +31,6 @@ export async function addBook(newBook: NewBook): Promise<void> {
       toast.success('Book added successfully!'),
     );
   } catch (error: unknown) {
-    
     toast.error('Error: could not add new book');
   }
 }

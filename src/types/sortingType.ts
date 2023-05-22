@@ -1,1 +1,5 @@
-export type SortingType = 'year' | 'rating' | 'author';
+export enum SortingType {
+  Year = 'year',
+  Rating = 'rating',
+  Author = 'author',
+}

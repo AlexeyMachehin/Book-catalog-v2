@@ -45,6 +45,7 @@ function BookCard({
           component="h5">
           Title: {book.title}
         </Typography>
+
         <Typography
           variant="h6"
           component="h6"
@@ -52,18 +53,21 @@ function BookCard({
           color="text.secondary">
           Author: {book.author}
         </Typography>
+
         <Typography
           className={classes.bookCardTypography}
           variant="body2"
           color="text.secondary">
           Publication year: {book.year === 0 ? '' : book.year}
         </Typography>
+
         <Typography
           className={classes.bookCardTypography}
           variant="body2"
           color="text.secondary">
           Rating: {book.rating}
         </Typography>
+
         <Typography
           className={classes.bookCardTypography}
           variant="body2"
@@ -71,6 +75,7 @@ function BookCard({
           ISBN: {book.isbn}
         </Typography>
       </CardContent>
+
       <CardActions>
         <Button
           onClick={() => {

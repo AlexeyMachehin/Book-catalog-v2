@@ -19,11 +19,8 @@ function AddBook({
       year: Number(values.year),
       rating: Number(values.rating),
       isbn: values.isbn,
-      imageLink: await getBookCoverLink(values.title, values.author.join(',')).then(
-        result => result,
-      ),
+      imageLink: await getBookCoverLink(values.title, values.author.join(',')),
     }).finally(() => setIsLoaderOn(false));
-
   };
 
   const initialValues = {

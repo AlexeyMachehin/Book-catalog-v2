@@ -1,12 +1,11 @@
 import CircularProgress from '@mui/material/CircularProgress';
-import { IBook } from '@/types/IBook';
 import classes from './loader.module.css';
 
-export default function Loader({ books }: { books: IBook[] }) {
+export default function Loader({ isFirstLoad }: { isFirstLoad: boolean }) {
   return (
     <div
       className={`${classes.loaderWrapper} ${
-        books.length === 0 && classes.firstLoad
+        isFirstLoad && classes.firstLoad
       }`}>
       <CircularProgress />
     </div>

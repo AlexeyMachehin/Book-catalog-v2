@@ -1,6 +1,6 @@
-import { MuiChipsInput } from 'mui-chips-input';
-import { FocusEventHandler } from 'react';
+import { useState } from 'react';
 import { useHandleBookFormik } from '@/hooks/useHandleBookFormik';
+import { MuiChipsInput } from 'mui-chips-input';
 import { Button, Card, TextField } from '@mui/material';
 import { FormikValues } from '@/types/IBook';
 import classes from './BookDataForm.module.css';
@@ -10,10 +10,13 @@ interface INewBookFormProps {
   initialValues: FormikValues;
 }
 
-export default function NewBookForm({
+export default function BookDataForm({
   handleSubmit,
   initialValues,
 }: INewBookFormProps) {
+  // Необходимо для работы на мобильных устройствах.
+  const [chipValue, setChipValue] = useState('');
+
   const onSubmit = async (values: FormikValues) => {
     await handleSubmit(values);
     formik.resetForm();
@@ -21,51 +24,52 @@ export default function NewBookForm({
 
   const formik = useHandleBookFormik(onSubmit, initialValues);
 
-  const handleAuthorsBlur: FocusEventHandler<HTMLInputElement> = event => {
-    const value = (event.target as HTMLInputElement).value;
-    if (value) {
-      formik.setFieldValue('author', [...formik.values.author, value]);
+  const handleAuthorsBlur = () => {
+    if (chipValue) {
+      formik.setFieldValue('author', [...formik.values.author, chipValue]);
+      setChipValue('');
     }
 
     formik.setFieldTouched('author', true);
   };
 
+  const showError = (value: keyof FormikValues): boolean => {
+    return Boolean(formik.touched[value]) && Boolean(formik.errors[value]);
+  };
+
   return (
-    <Card className={classes.addBookCard}>
-      <form className={classes.addBookForm} onSubmit={formik.handleSubmit}>
+    <Card className={classes.bookDataCard}>
+      <form className={classes.bookDataForm} onSubmit={formik.handleSubmit}>
         <TextField
           id="title"
           label="Title*"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.title}
-          error={formik.touched.title && Boolean(formik.errors.title)}
+          error={showError('title')}
         />
 
-        {formik.touched.title && formik.errors.title && (
+        {showError('title') && (
           <div className="error">{formik.errors.title}</div>
         )}
 
         <MuiChipsInput
           id="author"
           label="Authors*"
-          clearInputOnBlur
           onChange={value => {
             formik.setFieldValue('author', value);
+            setChipValue('');
           }}
           onBlur={handleAuthorsBlur}
           value={formik.values.author}
-          error={
-            (formik.touched.author || formik.dirty) &&
-            formik.values.author.length === 0 &&
-            Boolean(formik.errors.author)
-          }
+          inputValue={chipValue}
+          onInputChange={setChipValue}
+          error={showError('author') && formik.values.author.length === 0}
         />
 
-        {(formik.touched.author || formik.dirty) &&
-          formik.values.author.length === 0 && (
-            <div className="error">{formik.errors.author}</div>
-          )}
+        {showError('author') && formik.values.author.length === 0 && (
+          <div className="error">{formik.errors.author}</div>
+        )}
 
         <TextField
           id="year"
@@ -73,12 +77,10 @@ export default function NewBookForm({
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.year == null ? '' : formik.values.year}
-          error={formik.touched.year && Boolean(formik.errors.year)}
+          error={showError('year')}
         />
 
-        {formik.touched.year && formik.errors.year && (
-          <div className="error">{formik.errors.year}</div>
-        )}
+        {showError('year') && <div className="error">{formik.errors.year}</div>}
 
         <TextField
           id="rating"
@@ -86,10 +88,10 @@ export default function NewBookForm({
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.rating == null ? '' : formik.values.rating}
-          error={formik.touched.rating && Boolean(formik.errors.rating)}
+          error={showError('rating')}
         />
 
-        {formik.touched.rating && formik.errors.rating && (
+        {showError('rating') && (
           <div className="error">{formik.errors.rating}</div>
         )}
 
@@ -99,12 +101,10 @@ export default function NewBookForm({
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.isbn}
-          error={formik.touched.isbn && Boolean(formik.errors.isbn)}
+          error={showError('isbn')}
         />
 
-        {formik.touched.isbn && formik.errors.isbn && (
-          <div className="error">{formik.errors.isbn}</div>
-        )}
+        {showError('isbn') && <div className="error">{formik.errors.isbn}</div>}
 
         <Button type="submit" variant="outlined">
           Submit

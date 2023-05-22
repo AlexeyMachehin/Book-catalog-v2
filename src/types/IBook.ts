@@ -9,7 +9,7 @@ export interface IBook {
 }
 
 export type FormikValues = Omit<IBook, 'id' | 'imageLink' | 'author'> & {
-  author: string[],
+  author: string[];
 };
 
 export type NewBook = Omit<IBook, 'id'>;
