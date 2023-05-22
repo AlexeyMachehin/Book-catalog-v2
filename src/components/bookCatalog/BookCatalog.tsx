@@ -1,24 +1,24 @@
 import { useEffect, useState } from 'react';
+import { group } from '@/utils/group';
+import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
 import { onSnapshot } from 'firebase/firestore';
 import { colRef } from '@/firebase/firebase';
 import Loader from '../loader/Loader';
 import EditBookModal from '../editBookModal/EditBookModal';
 import { Toaster, toast } from 'react-hot-toast';
-import { IBook } from '@/types/IBook';
-import { group } from '@/utils/group';
-import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
-import { SortingType } from '@/types/sortingType';
 import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
 import BookCard from '../bookCard/BookCard';
+import { Typography } from '@mui/material';
 import Navigate from '../navigate/Navigate';
 import Sorting from '../sorting/Sorting';
 import AddBook from '../addBook/AddBook';
+import { IBook } from '@/types/IBook';
+import { SortingType } from '@/types/sortingType';
 import classes from './bookCatalog.module.css';
-import { Typography } from '@mui/material';
 
 export default function BookCatalog() {
   const [books, setBooks] = useState<IBook[]>([]);
-  const [sortingType, setSortingType] = useState<SortingType>('year');
+  const [sortingType, setSortingType] = useState<SortingType>(SortingType.Year);
   const [recommendedBook, setRecommendedBook] = useState<IBook | null>(null);
   const [isEditBookModalOpen, setIsEditBookModalOpen] = useState(false);
   const [editBook, setEditBook] = useState<IBook | null>(null);
@@ -54,7 +54,9 @@ export default function BookCatalog() {
 
   return (
     <>
-      {books.length === 0 || isLoaderOn ? <Loader books={books} /> : null}
+      {books.length === 0 || isLoaderOn ? (
+        <Loader isFirstLoad={!books.length} />
+      ) : null}
 
       <Toaster toastOptions={{ duration: 4000 }} />
 
@@ -92,14 +94,14 @@ export default function BookCatalog() {
       </section>
 
       <section>
-        {group(books, sortingType).map((booksGroup: IBook[]) => (
+        {group(books, sortingType).map(booksGroup => (
           <div
             id={`navigate-${booksGroup[0][sortingType]}`}
             key={booksGroup[0][sortingType]}>
             <SortedBooksTitle books={booksGroup} sortingType={sortingType} />
 
             <div className={classes.books}>
-              {booksGroup.map((book: IBook) => (
+              {booksGroup.map(book => (
                 <BookCard
                   setIsLoaderOn={setIsLoaderOn}
                   handleOpenBookModal={handleOpenBookModal}

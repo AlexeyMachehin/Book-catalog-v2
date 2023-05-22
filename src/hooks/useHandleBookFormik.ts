@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { validateISBN } from '@/utils/validateISBN';
-import { FormikValues} from '@/types/IBook';
+import { FormikValues } from '@/types/IBook';
 
 export const useHandleBookFormik = (
   onSubmit: (values: FormikValues) => Promise<void>,
@@ -11,8 +11,7 @@ export const useHandleBookFormik = (
     title: Yup.string()
       .max(100, 'Must be 100 characters or less')
       .required('Required field'),
-      author: Yup.array()
-      .min(1, 'Must have at least one author'),
+    author: Yup.array().min(1, 'Must have at least one author'),
     year: Yup.number()
       .typeError('Enter a number greater than 1800')
       .min(1800, 'Must be greater than 1800')

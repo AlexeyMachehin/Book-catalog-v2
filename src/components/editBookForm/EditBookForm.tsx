@@ -30,7 +30,7 @@ export default function EditForm({
           imageLink: await getBookCoverLink(
             values.title,
             values.author.join(','),
-          ).then(result => result),
+          ),
         },
 
         editBook.id,

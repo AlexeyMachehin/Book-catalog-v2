@@ -3,9 +3,9 @@ import { group } from '@/utils/group';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { IBook } from '@/types/IBook';
 import { Link } from 'react-scroll';
 import { SortingType } from '@/types/sortingType';
+import { IBook } from '@/types/IBook';
 import classes from './navigate.module.css';
 
 interface ISelectsProps {
@@ -15,10 +15,13 @@ interface ISelectsProps {
 
 export default function Navigate({ sortingType, books }: ISelectsProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -44,7 +47,7 @@ export default function Navigate({ sortingType, books }: ISelectsProps) {
           'aria-labelledby': 'basic-button',
         }}>
         {books.length !== 0 &&
-          group(books, sortingType).map((booksGroup: IBook[]) => {
+          group(books, sortingType).map(booksGroup => {
             return (
               <MenuItem
                 className={classes.navigateItem}

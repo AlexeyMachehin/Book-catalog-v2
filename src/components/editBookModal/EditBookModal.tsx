@@ -18,6 +18,7 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
   ref,
 ) {
   const { in: open, children, onEnter, onExited, ...other } = props;
+  
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
