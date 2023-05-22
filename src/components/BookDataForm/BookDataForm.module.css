@@ -1,0 +1,16 @@
+.bookDataForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+  padding: 5px;
+}
+
+.bookDataCard {
+  width: 300px;
+  padding: 10px;
+  box-shadow: 1px 3px 1px -2px rgb(0 0 0 / 20%),
+    1px 2px 2px 1px rgb(0 0 0 / 14%), 1px 2px 4px 0 rgb(0 0 0 / 12%);
+}

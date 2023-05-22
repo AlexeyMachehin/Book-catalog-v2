@@ -1,7 +1,10 @@
+import BookCatalog from './components/bookCatalog/BookCatalog';
 import './styles/App.css';
 
-function App() {
-  return <div className="App"></div>;
+export default function App() {
+  return (
+    <div className="App">
+      <BookCatalog />
+    </div>
+  );
 }
-
-export default App;

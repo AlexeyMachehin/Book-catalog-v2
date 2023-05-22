@@ -1,0 +1,30 @@
+.books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px 20px 20px 60px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 40px;
+  margin: 40px 0;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 60px;
+  padding: 20px;
+}
+
+.recommendedBookWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
