@@ -1,3 +1,5 @@
+import { toast } from 'react-hot-toast';
+
 export async function getBookCoverLink(
   title: string,
   author: string,
@@ -6,7 +8,9 @@ export async function getBookCoverLink(
     `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
       `intitle:${title} inauthor:${author}`,
     )}`,
-  ).then(response => response.json());
+  )
+    .then(response => response.json())
+    .catch(() => toast('Error while get book cover'));
 
   if (data.items) {
     const itemWithCover = data.items.find(

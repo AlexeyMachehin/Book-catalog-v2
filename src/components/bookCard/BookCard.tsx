@@ -11,15 +11,11 @@ import classes from './BookCard.module.css';
 
 interface IBookCardProps {
   setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenBookModal: (book: IBook) => void;
+  setBookForUpdate: React.Dispatch<React.SetStateAction<IBook | null>>;
   book: IBook;
 }
 
-function BookCard({
-  book,
-  handleOpenBookModal,
-  setIsLoaderOn,
-}: IBookCardProps) {
+function BookCard({ book, setBookForUpdate, setIsLoaderOn }: IBookCardProps) {
   const { ref, inView } = useInView({
     triggerOnce: true,
   });
@@ -79,7 +75,7 @@ function BookCard({
       <CardActions>
         <Button
           onClick={() => {
-            handleOpenBookModal(book);
+            setBookForUpdate(book);
           }}
           size="large">
           Edit

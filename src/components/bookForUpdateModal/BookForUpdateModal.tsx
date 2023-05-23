@@ -1,10 +1,10 @@
-import * as React from 'react';
+import { memo, forwardRef } from 'react';
 import { useSpring, animated } from 'react-spring';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
-import EditForm from '../editBookForm/EditBookForm';
+import UpdateBook from '../updateBook/UpdateBook';
 import { IBook } from '@/types/IBook';
-import classes from './editBookModal.module.css';
+import classes from './bookForUpdateModal.module.css';
 
 interface FadeProps {
   children?: React.ReactElement;
@@ -13,12 +13,9 @@ interface FadeProps {
   onExited?: () => void;
 }
 
-const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
-  props,
-  ref,
-) {
+const Fade = forwardRef<HTMLDivElement, FadeProps>(function Fade(props, ref) {
   const { in: open, children, onEnter, onExited, ...other } = props;
-  
+
   const style = useSpring({
     from: { opacity: 0 },
     to: { opacity: open ? 1 : 0 },
@@ -42,36 +39,34 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(function Fade(
 });
 
 interface IEditBookModalProps {
-  editBook: IBook | null;
-  isEditBookModalOpen: boolean;
-  setIsEditBookModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  bookForUpdate: IBook | null;
+  setBookForUpdate: React.Dispatch<React.SetStateAction<IBook | null>>;
   setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function EditBookModal({
-  editBook,
-  isEditBookModalOpen,
-  setIsEditBookModalOpen,
+function BookForUpdateModal({
+  bookForUpdate,
   setIsLoaderOn,
+  setBookForUpdate,
 }: IEditBookModalProps) {
   return (
     <div>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
-        open={isEditBookModalOpen}
-        onClose={() => setIsEditBookModalOpen(false)}
+        open={!!bookForUpdate}
+        onClose={() => setBookForUpdate(null)}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}>
-        <Fade in={isEditBookModalOpen}>
+        <Fade in={!!bookForUpdate}>
           <div className={classes.background}>
-            <EditForm
+            <UpdateBook
+              setBookForUpdate={setBookForUpdate}
               setIsLoaderOn={setIsLoaderOn}
-              setIsEditBookModalOpen={setIsEditBookModalOpen}
-              editBook={editBook}
+              bookForUpdate={bookForUpdate}
             />
           </div>
         </Fade>
@@ -79,3 +74,5 @@ export default function EditBookModal({
     </div>
   );
 }
+
+export default memo(BookForUpdateModal);
