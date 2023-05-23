@@ -27,9 +27,8 @@ export const colRef = collection(db, 'books');
 
 export async function addBook(newBook: NewBook): Promise<void> {
   try {
-    await addDoc(colRef, newBook).then(() =>
-      toast.success('Book added successfully!'),
-    );
+    await addDoc(colRef, newBook);
+    toast.success('Book added successfully!');
   } catch (error: unknown) {
     toast.error('Error: could not add new book');
   }
@@ -37,9 +36,8 @@ export async function addBook(newBook: NewBook): Promise<void> {
 
 export async function deleteBook(deletedBook: IBook): Promise<void> {
   try {
-    await deleteDoc(doc(db, 'books', deletedBook.id)).then(() =>
-      toast.success('Book deleted successfully!'),
-    );
+    await deleteDoc(doc(db, 'books', deletedBook.id));
+    toast.success('Book deleted successfully!');
   } catch (error: unknown) {
     toast.error('Error: could not delete book');
   }
@@ -50,9 +48,8 @@ export async function updateBook(
   id: string,
 ): Promise<void> {
   try {
-    await updateDoc(doc(db, 'books', id), updatedBook).then(() =>
-      toast.success('Book updated successfully!'),
-    );
+    await updateDoc(doc(db, 'books', id), updatedBook);
+    toast.success('Book updated successfully!');
   } catch (error: unknown) {
     toast.error('Error: could not update book');
   }

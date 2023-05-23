@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { group } from '@/utils/group';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,13 +9,13 @@ import classes from './navigate.module.css';
 
 interface ISelectsProps {
   sortingType: SortingType;
-  books: IBook[];
+  books: IBook[][];
 }
 
 export default function Navigate({ sortingType, books }: ISelectsProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorMenu, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const open = Boolean(anchorEl);
+  const isMenuOpen = Boolean(anchorMenu);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -31,23 +30,23 @@ export default function Navigate({ sortingType, books }: ISelectsProps) {
       <Button
         variant="outlined"
         id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
+        aria-controls={isMenuOpen ? 'basic-menu' : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
+        aria-expanded={isMenuOpen ? 'true' : undefined}
         onClick={handleClick}>
         Navigate
       </Button>
 
       <Menu
         id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
+        anchorEl={anchorMenu}
+        open={isMenuOpen}
         onClose={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}>
         {books.length !== 0 &&
-          group(books, sortingType).map(booksGroup => {
+          books.map(booksGroup => {
             return (
               <MenuItem
                 className={classes.navigateItem}
