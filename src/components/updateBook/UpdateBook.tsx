@@ -5,21 +5,21 @@ import { Typography } from '@mui/material';
 import { FormikValues, IBook } from '@/types/IBook';
 
 interface IEditFormProps {
-  setIsEditBookModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBookForUpdate: React.Dispatch<React.SetStateAction<IBook | null>>;
   setIsLoaderOn: React.Dispatch<React.SetStateAction<boolean>>;
-  editBook: IBook | null;
+  bookForUpdate: IBook | null;
 }
 
-export default function EditForm({
+export default function UpdateBook({
   setIsLoaderOn,
-  setIsEditBookModalOpen,
-  editBook,
+  setBookForUpdate,
+  bookForUpdate,
 }: IEditFormProps) {
   const handleSubmit = async (values: FormikValues) => {
-    setIsEditBookModalOpen(false);
+    setBookForUpdate(null);
     setIsLoaderOn(true);
 
-    if (editBook) {
+    if (bookForUpdate) {
       updateBook(
         {
           title: values.title.trim(),
@@ -33,18 +33,18 @@ export default function EditForm({
           ),
         },
 
-        editBook.id,
+        bookForUpdate.id,
       ).finally(() => setIsLoaderOn(false));
     }
   };
 
   const initialValues = {
-    title: editBook?.title ? editBook.title : '',
-    author: editBook?.author ? editBook.author.split(',') : [],
-    year: editBook?.year ? editBook.year : null,
-    rating: editBook?.rating ? editBook.rating : null,
-    isbn: editBook?.isbn ? editBook?.isbn : '',
-    imageLink: editBook?.imageLink ? editBook?.imageLink : '',
+    title: bookForUpdate?.title ? bookForUpdate.title : '',
+    author: bookForUpdate?.author ? bookForUpdate.author.split(',') : [],
+    year: bookForUpdate?.year ? bookForUpdate.year : null,
+    rating: bookForUpdate?.rating ? bookForUpdate.rating : null,
+    isbn: bookForUpdate?.isbn ? bookForUpdate?.isbn : '',
+    imageLink: bookForUpdate?.imageLink ? bookForUpdate?.imageLink : '',
   };
 
   return (

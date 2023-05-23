@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { group } from '@/utils/group';
 import { generateRecommendedBook } from '@/utils/generateRecommendedBook';
 import { onSnapshot } from 'firebase/firestore';
 import { colRef } from '@/firebase/firebase';
 import Loader from '../loader/Loader';
-import EditBookModal from '../editBookModal/EditBookModal';
-import { Toaster, toast } from 'react-hot-toast';
+import BookForUpdateModal from '../bookForUpdateModal/BookForUpdateModal';
+import { toast } from 'react-hot-toast';
 import SortedBooksTitle from '../sortedBooksTitle/SortedBooksTitle';
 import BookCard from '../bookCard/BookCard';
 import { Typography } from '@mui/material';
@@ -19,18 +19,17 @@ import classes from './bookCatalog.module.css';
 export default function BookCatalog() {
   const [books, setBooks] = useState<IBook[]>([]);
   const [sortingType, setSortingType] = useState<SortingType>(SortingType.Year);
-  const [recommendedBook, setRecommendedBook] = useState<IBook | null>(null);
-  const [isEditBookModalOpen, setIsEditBookModalOpen] = useState(false);
-  const [editBook, setEditBook] = useState<IBook | null>(null);
+  const [bookForUpdate, setBookForUpdate] = useState<IBook | null>(null);
   const [isLoaderOn, setIsLoaderOn] = useState(false);
 
-  function handleOpenBookModal(book: IBook) {
-    setIsEditBookModalOpen(true);
-    setEditBook(book);
-  }
+  const sortedBooks = group(books, sortingType);
+  const recommendedBook = useMemo(
+    () => generateRecommendedBook(books),
+    [books],
+  );
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
+    const booksSnapshotSubscription = onSnapshot(
       colRef,
       snapshot => {
         const booksData = snapshot.docs.map(doc => ({
@@ -40,7 +39,6 @@ export default function BookCatalog() {
 
         if (booksData) {
           setBooks(booksData);
-          setRecommendedBook(generateRecommendedBook(booksData));
         }
       },
       error => {
@@ -49,22 +47,19 @@ export default function BookCatalog() {
       },
     );
 
-    return () => unsubscribe();
+    return () => booksSnapshotSubscription();
   }, []);
 
   return (
     <>
-      {books.length === 0 || isLoaderOn ? (
-        <Loader isFirstLoad={!books.length} />
+      {!sortedBooks.length || isLoaderOn ? (
+        <Loader isFirstLoad={!sortedBooks.length} />
       ) : null}
 
-      <Toaster toastOptions={{ duration: 4000 }} />
-
-      {editBook && (
-        <EditBookModal
-          setIsEditBookModalOpen={setIsEditBookModalOpen}
-          isEditBookModalOpen={isEditBookModalOpen}
-          editBook={editBook}
+      {bookForUpdate && (
+        <BookForUpdateModal
+          setBookForUpdate={setBookForUpdate}
+          bookForUpdate={bookForUpdate}
           setIsLoaderOn={setIsLoaderOn}
         />
       )}
@@ -78,7 +73,7 @@ export default function BookCatalog() {
 
             <BookCard
               setIsLoaderOn={setIsLoaderOn}
-              handleOpenBookModal={handleOpenBookModal}
+              setBookForUpdate={setBookForUpdate}
               book={recommendedBook}
             />
           </div>
@@ -89,29 +84,29 @@ export default function BookCatalog() {
 
       <section className={classes.filters}>
         <Sorting sortingType={sortingType} setSortingType={setSortingType} />
-
-        <Navigate books={books} sortingType={sortingType} />
+        <Navigate books={sortedBooks} sortingType={sortingType} />
       </section>
 
       <section>
-        {group(books, sortingType).map(booksGroup => (
-          <div
-            id={`navigate-${booksGroup[0][sortingType]}`}
-            key={booksGroup[0][sortingType]}>
-            <SortedBooksTitle books={booksGroup} sortingType={sortingType} />
+        {sortedBooks.length &&
+          sortedBooks.map(booksGroup => (
+            <div
+              id={`navigate-${booksGroup[0][sortingType]}`}
+              key={booksGroup[0][sortingType]}>
+              <SortedBooksTitle booksGroup={booksGroup} sortingType={sortingType} />
 
-            <div className={classes.books}>
-              {booksGroup.map(book => (
-                <BookCard
-                  setIsLoaderOn={setIsLoaderOn}
-                  handleOpenBookModal={handleOpenBookModal}
-                  key={book.id}
-                  book={book}
-                />
-              ))}
+              <div className={classes.books}>
+                {booksGroup.map(book => (
+                  <BookCard
+                    setIsLoaderOn={setIsLoaderOn}
+                    setBookForUpdate={setBookForUpdate}
+                    key={book.id}
+                    book={book}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </section>
     </>
   );

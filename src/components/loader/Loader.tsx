@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import classes from './loader.module.css';
 
-export default function Loader({ isFirstLoad }: { isFirstLoad: boolean }) {
+function Loader({ isFirstLoad }: { isFirstLoad: boolean }) {
   return (
     <div
       className={`${classes.loaderWrapper} ${
@@ -11,3 +12,5 @@ export default function Loader({ isFirstLoad }: { isFirstLoad: boolean }) {
     </div>
   );
 }
+
+export default memo(Loader);
