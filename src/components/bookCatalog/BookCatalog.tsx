@@ -22,7 +22,11 @@ export default function BookCatalog() {
   const [bookForUpdate, setBookForUpdate] = useState<IBook | null>(null);
   const [isLoaderOn, setIsLoaderOn] = useState(false);
 
-  const sortedBooks = group(books, sortingType);
+  const sortedBooks = useMemo(
+    () => group(books, sortingType),
+    [books, sortingType],
+  );
+
   const recommendedBook = useMemo(
     () => generateRecommendedBook(books),
     [books],
@@ -93,7 +97,10 @@ export default function BookCatalog() {
             <div
               id={`navigate-${booksGroup[0][sortingType]}`}
               key={booksGroup[0][sortingType]}>
-              <SortedBooksTitle booksGroup={booksGroup} sortingType={sortingType} />
+              <SortedBooksTitle
+                booksGroup={booksGroup}
+                sortingType={sortingType}
+              />
 
               <div className={classes.books}>
                 {booksGroup.map(book => (
