@@ -12,7 +12,6 @@
   "author": "Alexey Machehin",
   "dependencies": {
     "@fontsource/roboto": "^4.5.8",
-    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
     "@vitejs/plugin-react": "^3.1.0",
     "firebase": "^9.21.0",
