@@ -19,6 +19,8 @@
 * Vite
 * Material UI
 * Firebase
+* Formik
+* Yup
 * Eslint
 * Stylelint
  
